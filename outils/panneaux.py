@@ -16,12 +16,15 @@ from skimage.morphology import skeletonize
 from prmi.inference import RootSegmentator, overlay
 from prmi.preprocess import crop_for
 
-EXEMPLES = Path("/home/francois/Bureau/e-portfolio/prmi-roots/examples/images")
+DEPOT = Path("/home/francois/Bureau/e-portfolio/prmi-roots")
+EXEMPLES = DEPOT / "examples" / "images"
+TEST_150 = DEPOT / "data" / "raw" / "test" / "images" / "Peanut_736x552_DPI150"
 CAS = [
     ("denses", "Racines denses", "Peanut_T019_L083_2016.06.13_130232_BAZ_DPI150"),
     ("fines", "Racines fines", "Peanut_T019_L046_2015.06.04_104607_BAZ_DPI150"),
     ("sombre", "Image sombre", "Peanut_T019_L077_2016.07.25_170233_BAZ_DPI150"),
-    ("camera", "Autre caméra", "Peanut_T026_L049_2017.07.27_123345_EED_DPI120"),
+    # image du test officiel (hors dossier examples/), sol aux tons orangés, détection sans fausse tache
+    ("orangee", "Image orangée", "Peanut_T018_L018_2016.07.12_163531_BAZ_DPI150"),
     ("sans-racine", "Sans racine", "Peanut_T018_L064_2015.06.04_104218_BAZ_DPI150"),
 ]
 
@@ -47,7 +50,10 @@ def main(sortie):
     rs = RootSegmentator()
     valeurs = []
     for cle, libelle, nom in CAS:
-        rgb = np.array(Image.open(EXEMPLES / f"{nom}.jpg").convert("RGB"))
+        source = EXEMPLES / f"{nom}.jpg"
+        if not source.exists():
+            source = TEST_150 / f"{nom}.jpg"
+        rgb = np.array(Image.open(source).convert("RGB"))
         res = rs.analyze(rgb, name=nom)
         dpi = 120 if "DPI120" in nom else 150
         brute = rgb[crop_for(dpi)]
