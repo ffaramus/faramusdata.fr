@@ -310,6 +310,334 @@ a:hover {
 }
 
 
+/* Sections de la page : filet foncé en tête, titre, chapô, puis contenu */
+
+.section {
+  padding-block: var(--espace-6) var(--espace-9);
+  border-top: 1px solid var(--couleur-encre);
+}
+
+.section-chapo {
+  max-width: var(--largeur-texte);
+  margin-top: var(--espace-3);
+  font-size: var(--taille-3);
+}
+
+/* En-tête de section : étiquette numérotée, titre fort, chapô */
+.section-entete {
+  max-width: 44rem;
+}
+
+.section-etiquette {
+  color: var(--couleur-accent);
+  font-family: var(--police-legende);
+  font-size: var(--taille-0);
+}
+
+.section-entete h2 {
+  margin-top: var(--espace-2);
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.section-entete .section-chapo {
+  margin-top: var(--espace-4);
+}
+
+/* Fiches de réalisation : repères dans la marge, contenu à droite */
+.fiche {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+  column-gap: var(--espace-8);
+  margin-top: var(--espace-7);
+  padding-top: var(--espace-5);
+  border-top: 1px solid var(--couleur-filet);
+}
+
+.section-entete + .fiche {
+  margin-top: var(--espace-7);
+}
+
+.fiche-marge p + p {
+  margin-top: var(--espace-2);
+}
+
+.fiche-periode {
+  font-family: var(--police-legende);
+  font-size: var(--taille-1);
+  font-weight: 500;
+}
+
+.fiche-cadre {
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-1);
+  line-height: 1.45;
+}
+
+.fiche-statut {
+  padding-left: var(--espace-3);
+  border-left: 3px solid var(--couleur-accent);
+  color: var(--couleur-accent-fonce);
+  font-size: var(--taille-1);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.fiche-corps {
+  max-width: 44rem;
+}
+
+.fiche-corps h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.fiche-resultat {
+  margin-top: var(--espace-3);
+  font-size: var(--taille-3);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.fiche-points {
+  margin: var(--espace-4) 0 0;
+  padding-left: 1.1em;
+}
+
+.fiche-points li + li {
+  margin-top: var(--espace-2);
+}
+
+.fiche-note {
+  margin-top: var(--espace-4);
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-1);
+}
+
+.chiffres-cles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espace-5);
+  margin: var(--espace-5) 0 0;
+}
+
+.chiffres-cles div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  padding-top: var(--espace-3);
+  border-top: 2px solid var(--couleur-accent);
+}
+
+.chiffres-cles dd {
+  margin: 0;
+  color: var(--couleur-accent);
+  font-family: var(--police-legende);
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.chiffres-cles dt {
+  margin-top: var(--espace-2);
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-0);
+  line-height: 1.4;
+}
+
+.fiche-details {
+  margin-top: var(--espace-5);
+}
+
+.fiche-details summary {
+  color: var(--couleur-accent);
+  font-family: var(--police-legende);
+  font-size: var(--taille-0);
+  cursor: pointer;
+}
+
+.fiche-details summary:hover {
+  color: var(--couleur-accent-fonce);
+}
+
+.fiche-details .fiche-points {
+  margin-top: var(--espace-3);
+  font-size: var(--taille-1);
+}
+
+.fiche-liens {
+  margin-top: var(--espace-4);
+  font-family: var(--police-legende);
+  font-size: var(--taille-0);
+}
+
+
+.fiche-texte {
+  margin-top: var(--espace-3);
+}
+
+.section-action {
+  margin-top: var(--espace-7);
+}
+
+.section-note {
+  max-width: var(--largeur-texte);
+  margin-top: var(--espace-6);
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-1);
+}
+
+/* Problèmes : quatre phrases numérotées, deux par ligne */
+.problemes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espace-5) var(--espace-8);
+  margin: var(--espace-7) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: probleme;
+}
+
+.problemes li {
+  padding-top: var(--espace-3);
+  border-top: 1px solid var(--couleur-filet);
+  font-size: var(--taille-3);
+  counter-increment: probleme;
+}
+
+.problemes li::before {
+  content: counter(probleme, decimal-leading-zero);
+  display: block;
+  margin-bottom: var(--espace-2);
+  color: var(--couleur-accent);
+  font-family: var(--police-legende);
+  font-size: var(--taille-0);
+}
+
+/* Méthode : quatre étapes côte à côte, numéro en bleu */
+.etapes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--espace-5);
+  margin: var(--espace-7) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: etape;
+}
+
+.etapes li {
+  padding-top: var(--espace-3);
+  border-top: 2px solid var(--couleur-accent);
+  counter-increment: etape;
+}
+
+.etapes li::before {
+  content: counter(etape);
+  display: block;
+  margin-bottom: var(--espace-2);
+  color: var(--couleur-accent);
+  font-family: var(--police-legende);
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.etapes strong {
+  display: block;
+  margin-bottom: var(--espace-1);
+  font-weight: 600;
+}
+
+/* Parcours : frise datée, la date dans la marge */
+.frise {
+  margin: var(--espace-7) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.frise-etape {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+  column-gap: var(--espace-8);
+  padding-block: var(--espace-4);
+  border-top: 1px solid var(--couleur-filet);
+}
+
+.frise-date {
+  color: var(--couleur-accent);
+  font-family: var(--police-legende);
+  font-size: var(--taille-1);
+  font-weight: 500;
+}
+
+.frise-contenu {
+  max-width: 44rem;
+}
+
+.frise-contenu h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.frise-contenu p {
+  margin-top: var(--espace-2);
+}
+
+/* Contact */
+.coordonnees {
+  margin: var(--espace-6) 0 0;
+  max-width: 44rem;
+}
+
+.coordonnees div {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+  column-gap: var(--espace-8);
+  padding-block: var(--espace-3);
+  border-top: 1px solid var(--couleur-filet);
+}
+
+.coordonnees dt {
+  color: var(--couleur-texte-secondaire);
+  font-family: var(--police-legende);
+  font-size: var(--taille-0);
+}
+
+.coordonnees dd {
+  margin: 0;
+}
+
+/* Informations à fournir par François : bien visibles tant qu'elles manquent */
+.a-completer {
+  padding: 0 0.25em;
+  border: 1px dashed var(--couleur-texte-secondaire);
+  color: var(--couleur-texte-secondaire);
+  font-family: var(--police-legende);
+  font-size: var(--taille-0);
+}
+
+/* Pied de page */
+.pied {
+  margin-top: var(--espace-8);
+}
+
+.pied-contenu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espace-2) var(--espace-5);
+  padding-block: var(--espace-5);
+  border-top: 1px solid var(--couleur-encre);
+  color: var(--couleur-texte-secondaire);
+  font-family: var(--police-legende);
+  font-size: var(--taille-0);
+}
+
+
 /* Figures, à la manière d'une figure scientifique : en tête le schéma de situation
    et la légende, puis les panneaux sur leur cadre sombre, les commandes et la source.
    Le schéma occupe le premier tiers : son trait de repère tombe ainsi sur le premier
@@ -368,7 +696,7 @@ a:hover {
 
 .figure-numero {
   margin-bottom: var(--espace-1);
-  color: var(--couleur-texte-secondaire);
+  color: var(--couleur-accent);
   font-family: var(--police-legende);
   font-size: var(--taille-0);
 }
@@ -527,8 +855,31 @@ a:hover {
     border-left: 0;
   }
 
-  .vitrine {
+  .vitrine,
+  .section {
     padding-bottom: var(--espace-8);
+  }
+
+  .fiche {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--espace-4);
+  }
+
+  .chiffres-cles {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espace-3);
+  }
+
+  .problemes,
+  .etapes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espace-4);
+  }
+
+  .frise-etape,
+  .coordonnees div {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--espace-2);
   }
 
   /* Le schéma garde 40 % de la largeur pour rester lisible ; son repère tombe toujours
