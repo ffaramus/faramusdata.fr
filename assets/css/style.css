@@ -311,17 +311,18 @@ a:hover {
 
 
 /* Figures, à la manière d'une figure scientifique : en tête le schéma de situation
-   et la légende, puis la vidéo sur son cadre sombre, puis la source.
+   et la légende, puis les panneaux sur leur cadre sombre, les commandes et la source.
    Le schéma occupe le premier tiers : son trait de repère tombe ainsi sur le premier
-   panneau de la vidéo et touche le cadre (aucun espace entre les rangées). */
+   panneau et touche le cadre (aucun espace entre les rangées). */
 
 .figure {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   grid-template-areas:
-    "schema legende"
-    "cadre  cadre"
-    "source source";
+    "schema    legende"
+    "cadre     cadre"
+    "commandes commandes"
+    "source    source";
   column-gap: var(--espace-6);
 }
 
@@ -333,7 +334,26 @@ a:hover {
 }
 
 .figure-schema .trait {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
+}
+
+.figure-schema .fin {
+  stroke-width: 0.9;
+}
+
+.figure-schema .racine {
+  stroke-width: 0.9;
+  stroke-opacity: 0.75;
+}
+
+.figure-schema .grains {
+  fill: currentColor;
+  fill-opacity: 0.3;
 }
 
 .figure-schema .repere {
@@ -370,15 +390,96 @@ a:hover {
   line-height: 1.55;
 }
 
-/* La vidéo porte ses propres marges sombres : le cadre en reprend la couleur */
+/* Les panneaux et les mesures sur le cadre sombre */
 .figure-cadre {
   grid-area: cadre;
+  padding: var(--espace-4);
   background: var(--couleur-cadre);
+  color: #E8EAE7;
 }
 
-.figure-cadre img,
-.figure-cadre video {
+.panneaux {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espace-3);
+}
+
+.panneau-titre {
+  margin-bottom: var(--espace-2);
+  font-size: var(--taille-1);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.panneau img {
   width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.figure-mesures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espace-3);
+  margin: var(--espace-4) 0 0;
+  padding-top: var(--espace-3);
+  border-top: 1px solid #2E3335;
+}
+
+.figure-mesures dt {
+  color: #A3ABAE;
+  font-size: var(--taille-0);
+}
+
+.figure-mesures dd {
+  margin: 0;
+  font-family: var(--police-legende);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+/* Choix de l'exemple et pause du défilement */
+.figure-commandes {
+  grid-area: commandes;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espace-3) var(--espace-5);
+  margin-top: var(--espace-3);
+  font-family: var(--police-legende);
+  font-size: var(--taille-0);
+}
+
+.figure-commandes[hidden] {
+  display: none;
+}
+
+.exemples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espace-2);
+}
+
+.exemple {
+  padding: 0.3em 0.7em;
+  border: 1px solid var(--couleur-filet);
+  border-radius: 3px;
+  background: none;
+  color: var(--couleur-accent);
+  font-family: var(--police-legende);
+  font-size: var(--taille-0);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.exemple:hover {
+  border-color: var(--couleur-accent);
+}
+
+.exemple[aria-pressed="true"] {
+  border-color: var(--couleur-encre);
+  color: var(--couleur-encre);
 }
 
 .figure-source {
@@ -388,7 +489,7 @@ a:hover {
   align-items: baseline;
   justify-content: space-between;
   gap: var(--espace-1) var(--espace-4);
-  margin-top: var(--espace-3);
+  margin-top: var(--espace-4);
   padding-top: var(--espace-3);
   border-top: 1px solid var(--couleur-filet);
   color: var(--couleur-texte-secondaire);
@@ -435,15 +536,32 @@ a:hover {
   .figure {
     grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
     grid-template-areas:
-      "legende legende"
-      "schema  ."
-      "cadre   cadre"
-      "source  source";
+      "legende   legende"
+      "schema    ."
+      "cadre     cadre"
+      "commandes commandes"
+      "source    source";
     column-gap: var(--espace-4);
   }
 
   .figure > figcaption {
     padding-bottom: var(--espace-4);
+  }
+  .figure-cadre {
+    padding: var(--espace-2);
+  }
+
+  .panneaux,
+  .figure-mesures {
+    gap: var(--espace-2);
+  }
+
+  .panneau-titre {
+    font-size: 0.75rem;
+  }
+
+  .figure-mesures dd {
+    font-size: var(--taille-1);
   }
 }
 
