@@ -269,6 +269,32 @@ a:hover {
   border-left: 1px solid var(--couleur-filet);
 }
 
+/* Photo en tête de l'encadré « En bref », avec nom et métier : une carte d'identité */
+.carte-identite {
+  margin: 0 0 var(--espace-6);
+}
+
+.portrait {
+  width: 100%;
+  max-width: 15rem;
+  border-radius: 3px;
+}
+
+.carte-identite figcaption {
+  margin-top: var(--espace-3);
+  line-height: 1.4;
+}
+
+.carte-identite strong {
+  display: block;
+  font-weight: 600;
+}
+
+.carte-identite span {
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-1);
+}
+
 .en-bref h2 {
   font-size: var(--taille-2);
   font-weight: 600;
@@ -622,6 +648,14 @@ a:hover {
 
 .coordonnees dd {
   margin: 0;
+}
+
+.contact-actions .coordonnees {
+  margin-top: var(--espace-6);
+}
+
+.pied-contenu a {
+  color: var(--couleur-texte-secondaire);
 }
 
 /* Informations à fournir par François : bien visibles tant qu'elles manquent */
@@ -1125,6 +1159,10 @@ a:hover {
     grid-template-columns: minmax(0, 1fr);
     row-gap: var(--espace-7);
     padding-block: var(--espace-7);
+  }
+
+  .portrait {
+    max-width: 13rem;
   }
 
   .en-bref {
