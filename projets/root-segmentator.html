@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Root Segmentator : mesurer les racines sur des images de minirhizotron | François Faramus</title>
+  <meta name="description" content="Comment j’ai construit Root Segmentator, un outil qui mesure automatiquement les racines sur des images de minirhizotron : le problème, les annotations défectueuses, la méthode, les résultats et les limites.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/figure-exemples.js" defer></script>
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <div class="conteneur">
+    <header class="entete">
+      <a class="logo" href="../index.html">François Faramus<span class="logo-precision">Data scientist · Rennes</span></a>
+      <nav class="navigation" aria-label="Navigation principale">
+        <ul>
+          <li><a href="../index.html#offres">Offres</a></li>
+          <li><a href="../index.html#projets">Projets</a></li>
+          <li><a href="../index.html#methode">Méthode</a></li>
+          <li><a href="../index.html#parcours">Parcours</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="contenu">
+      <header class="page-entete">
+        <p class="section-etiquette">Projet personnel, code ouvert · Octobre à novembre 2026</p>
+        <h1>Root Segmentator</h1>
+        <p class="page-chapo">Mesurer automatiquement les racines en millimètres sur des images de minirhizotron&#8239;: longueur, diamètre et intensité racinaire, image par image, puis par tube, date et profondeur.</p>
+        <dl class="chiffres-cles">
+          <div><dt>Recouvrement médian entre racines détectées et racines annotées (Dice, de 0 à 1), sur des tubes jamais vus, y compris avec une autre caméra</dt><dd>0,74 à 0,79</dd></div>
+          <div><dt>Écart sur la longueur totale des racines, après étalonnage</dt><dd>7,5&#8239;%</dd></div>
+          <div><dt>Images analysées par minute sur un ordinateur portable, sans carte graphique</dt><dd>360</dd></div>
+        </dl>
+        <p class="page-liens"><a href="https://rootseg.streamlit.app">Démo en ligne</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></p>
+      </header>
+
+      <section class="vitrine bande" aria-labelledby="figure-titre">
+        <figure class="figure">
+          <figcaption>
+            <p class="figure-numero">Figure 1</p>
+            <p class="figure-titre" id="figure-titre">Root Segmentator&#8239;: des images de minirhizotron aux mesures de racines</p>
+            <p class="figure-description">Un minirhizotron est un tube transparent enfoncé dans le sol&#8239;: une caméra y photographie les racines contre la paroi (cercle). Pour chaque image, Root Segmentator repère les racines, puis mesure leur longueur, leur diamètre moyen et l’intensité racinaire, c’est-à-dire la longueur de racines par cm² d’image. Exemples tirés d’images de test, jamais vues pendant l’entraînement.</p>
+          </figcaption>
+          <svg class="figure-schema" viewBox="130 0 380 320" role="img" aria-labelledby="schema-titre">
+            <title id="schema-titre">Schéma d’un minirhizotron&#8239;: un plant d’arachide, ses racines, et un tube transparent enfoncé en biais dans le sol, avec une caméra à l’intérieur. Un cercle marque la fenêtre d’observation, d’où part un trait vers la première image.</title>
+                <path class="trait" d="M10 110 C90 107 170 113 250 110 S410 107 590 111"/>
+                <g class="grains"><circle cx="153.3" cy="224.5" r="1"/><circle cx="370.4" cy="132.6" r="1"/><circle cx="27.4" cy="280.8" r="1"/><circle cx="165.2" cy="165" r="1"/><circle cx="577.6" cy="210.3" r="1"/><circle cx="488.4" cy="211.5" r="1"/><circle cx="375.5" cy="286.7" r="1"/><circle cx="313" cy="262.3" r="1"/><circle cx="444.6" cy="233.5" r="1"/><circle cx="188.7" cy="126" r="1"/><circle cx="422.5" cy="288.7" r="1"/><circle cx="241.2" cy="273.8" r="1"/><circle cx="269" cy="299.6" r="1"/><circle cx="512.2" cy="138.7" r="1"/><circle cx="96.1" cy="161.7" r="1"/><circle cx="370.9" cy="177.8" r="1"/><circle cx="304.1" cy="194.1" r="1"/><circle cx="216.5" cy="232.3" r="1"/><circle cx="347.2" cy="293.6" r="1"/><circle cx="499.6" cy="310.3" r="1"/><circle cx="395.9" cy="151.3" r="1"/><circle cx="526.6" cy="229.3" r="1"/><circle cx="69.6" cy="273.7" r="1"/><circle cx="249.9" cy="148.9" r="1"/><circle cx="184.6" cy="267.6" r="1"/><circle cx="422.3" cy="183.5" r="1"/><circle cx="303" cy="311.7" r="1"/><circle cx="130.5" cy="198.3" r="1"/><circle cx="195.7" cy="304.1" r="1"/><circle cx="522.1" cy="192.5" r="1"/><circle cx="277.8" cy="219.9" r="1"/><circle cx="380.6" cy="234.4" r="1"/><circle cx="333.2" cy="239.1" r="1"/><circle cx="327.1" cy="122.2" r="1"/><circle cx="31.2" cy="238.2" r="1"/><circle cx="371.3" cy="209.5" r="1"/><circle cx="415.9" cy="261.7" r="1"/><circle cx="32.4" cy="131.6" r="1"/><circle cx="398.6" cy="305" r="1"/><circle cx="223.8" cy="180" r="1"/><circle cx="188.2" cy="192.4" r="1"/><circle cx="452.5" cy="125.2" r="1"/><circle cx="193.6" cy="162.7" r="1"/><circle cx="470.1" cy="165.8" r="1"/><circle cx="146" cy="143.2" r="1"/><circle cx="471.8" cy="281" r="1"/></g>
+                <path class="trait" d="M250 110 C240 100 214 90 180 86"/>
+                <path class="trait fin" d="M227.5 97 L208.8 104"/>
+                <ellipse class="trait" cx="218.8" cy="106.7" rx="5.6" ry="2.9" transform="rotate(-262.4 218.8 106.7)"/>
+                <ellipse class="trait" cx="214.6" cy="95.4" rx="5.6" ry="2.9" transform="rotate(-138.4 214.6 95.4)"/>
+                <ellipse class="trait" cx="209.5" cy="110.2" rx="5.6" ry="2.9" transform="rotate(-262.4 209.5 110.2)"/>
+                <ellipse class="trait" cx="205.3" cy="98.9" rx="5.6" ry="2.9" transform="rotate(-138.4 205.3 98.9)"/>
+                <path class="trait fin" d="M203.9 90 L192.4 73.6"/>
+                <ellipse class="trait" cx="192.4" cy="84" rx="5.6" ry="2.9" transform="rotate(-187 192.4 84)"/>
+                <ellipse class="trait" cx="202.2" cy="77.2" rx="5.6" ry="2.9" transform="rotate(-63 202.2 77.2)"/>
+                <ellipse class="trait" cx="186.6" cy="75.9" rx="5.6" ry="2.9" transform="rotate(-187 186.6 75.9)"/>
+                <ellipse class="trait" cx="196.5" cy="69" rx="5.6" ry="2.9" transform="rotate(-63 196.5 69)"/>
+                <path class="trait fin" d="M180 86 L160.2 83.5"/>
+                <ellipse class="trait" cx="167.9" cy="90.5" rx="5.6" ry="2.9" transform="rotate(-234.9 167.9 90.5)"/>
+                <ellipse class="trait" cx="169.3" cy="78.6" rx="5.6" ry="2.9" transform="rotate(-110.9 169.3 78.6)"/>
+                <ellipse class="trait" cx="157.9" cy="89.3" rx="5.6" ry="2.9" transform="rotate(-234.9 157.9 89.3)"/>
+                <ellipse class="trait" cx="159.4" cy="77.4" rx="5.6" ry="2.9" transform="rotate(-110.9 159.4 77.4)"/>
+                <path class="trait" d="M250 110 C238 88 222 66 204 54"/>
+                <path class="trait fin" d="M231.6 81.2 L211.9 77.4"/>
+                <ellipse class="trait" cx="219.1" cy="84.9" rx="5.6" ry="2.9" transform="rotate(-230.9 219.1 84.9)"/>
+                <ellipse class="trait" cx="221.4" cy="73.1" rx="5.6" ry="2.9" transform="rotate(-106.9 221.4 73.1)"/>
+                <ellipse class="trait" cx="209.3" cy="83" rx="5.6" ry="2.9" transform="rotate(-230.9 209.3 83)"/>
+                <ellipse class="trait" cx="211.6" cy="71.2" rx="5.6" ry="2.9" transform="rotate(-106.9 211.6 71.2)"/>
+                <path class="trait fin" d="M217.1 64.7 L215.9 44.8"/>
+                <ellipse class="trait" cx="210.4" cy="53.6" rx="5.6" ry="2.9" transform="rotate(-155.3 210.4 53.6)"/>
+                <ellipse class="trait" cx="222.4" cy="52.9" rx="5.6" ry="2.9" transform="rotate(-31.3 222.4 52.9)"/>
+                <ellipse class="trait" cx="209.8" cy="43.6" rx="5.6" ry="2.9" transform="rotate(-155.3 209.8 43.6)"/>
+                <ellipse class="trait" cx="221.8" cy="42.9" rx="5.6" ry="2.9" transform="rotate(-31.3 221.8 42.9)"/>
+                <path class="trait fin" d="M204 54 L187.5 42.7"/>
+                <ellipse class="trait" cx="191.1" cy="52.4" rx="5.6" ry="2.9" transform="rotate(-207.6 191.1 52.4)"/>
+                <ellipse class="trait" cx="197.9" cy="42.5" rx="5.6" ry="2.9" transform="rotate(-83.6 197.9 42.5)"/>
+                <ellipse class="trait" cx="182.9" cy="46.8" rx="5.6" ry="2.9" transform="rotate(-207.6 182.9 46.8)"/>
+                <ellipse class="trait" cx="189.7" cy="36.9" rx="5.6" ry="2.9" transform="rotate(-83.6 189.7 36.9)"/>
+                <path class="trait" d="M250 110 C248 84 246 60 240 42"/>
+                <path class="trait fin" d="M246.9 76.5 L231.9 63.3"/>
+                <ellipse class="trait" cx="234.3" cy="73.4" rx="5.6" ry="2.9" transform="rotate(-200.7 234.3 73.4)"/>
+                <ellipse class="trait" cx="242.3" cy="64.4" rx="5.6" ry="2.9" transform="rotate(-76.7 242.3 64.4)"/>
+                <ellipse class="trait" cx="226.8" cy="66.8" rx="5.6" ry="2.9" transform="rotate(-200.7 226.8 66.8)"/>
+                <ellipse class="trait" cx="234.7" cy="57.8" rx="5.6" ry="2.9" transform="rotate(-76.7 234.7 57.8)"/>
+                <path class="trait fin" d="M243.8 56.6 L254 39.4"/>
+                <ellipse class="trait" cx="244.5" cy="43.6" rx="5.6" ry="2.9" transform="rotate(-121.3 244.5 43.6)"/>
+                <ellipse class="trait" cx="254.8" cy="49.7" rx="5.6" ry="2.9" transform="rotate(2.7 254.8 49.7)"/>
+                <ellipse class="trait" cx="249.6" cy="35" rx="5.6" ry="2.9" transform="rotate(-121.3 249.6 35)"/>
+                <ellipse class="trait" cx="260" cy="41.1" rx="5.6" ry="2.9" transform="rotate(2.7 260 41.1)"/>
+                <path class="trait fin" d="M240 42 L233.8 23"/>
+                <ellipse class="trait" cx="230.8" cy="32.9" rx="5.6" ry="2.9" transform="rotate(-169.9 230.8 32.9)"/>
+                <ellipse class="trait" cx="242.2" cy="29.2" rx="5.6" ry="2.9" transform="rotate(-45.9 242.2 29.2)"/>
+                <ellipse class="trait" cx="227.7" cy="23.4" rx="5.6" ry="2.9" transform="rotate(-169.9 227.7 23.4)"/>
+                <ellipse class="trait" cx="239.1" cy="19.7" rx="5.6" ry="2.9" transform="rotate(-45.9 239.1 19.7)"/>
+                <path class="trait" d="M250 110 C256 84 266 60 282 46"/>
+                <path class="trait fin" d="M260.7 76.8 L254.3 57.9"/>
+                <ellipse class="trait" cx="251.4" cy="67.9" rx="5.6" ry="2.9" transform="rotate(-170.6 251.4 67.9)"/>
+                <ellipse class="trait" cx="262.7" cy="64" rx="5.6" ry="2.9" transform="rotate(-46.6 262.7 64)"/>
+                <ellipse class="trait" cx="248.2" cy="58.4" rx="5.6" ry="2.9" transform="rotate(-170.6 248.2 58.4)"/>
+                <ellipse class="trait" cx="259.6" cy="54.6" rx="5.6" ry="2.9" transform="rotate(-46.6 259.6 54.6)"/>
+                <path class="trait fin" d="M271.1 58.2 L290.6 53.6"/>
+                <ellipse class="trait" cx="280.9" cy="49.8" rx="5.6" ry="2.9" transform="rotate(-75.3 280.9 49.8)"/>
+                <ellipse class="trait" cx="283.7" cy="61.4" rx="5.6" ry="2.9" transform="rotate(48.7 283.7 61.4)"/>
+                <ellipse class="trait" cx="290.6" cy="47.5" rx="5.6" ry="2.9" transform="rotate(-75.3 290.6 47.5)"/>
+                <ellipse class="trait" cx="293.4" cy="59.1" rx="5.6" ry="2.9" transform="rotate(48.7 293.4 59.1)"/>
+                <path class="trait fin" d="M282 46 L296.8 32.6"/>
+                <ellipse class="trait" cx="286.5" cy="33.8" rx="5.6" ry="2.9" transform="rotate(-104.1 286.5 33.8)"/>
+                <ellipse class="trait" cx="294.6" cy="42.7" rx="5.6" ry="2.9" transform="rotate(19.9 294.6 42.7)"/>
+                <ellipse class="trait" cx="293.9" cy="27.1" rx="5.6" ry="2.9" transform="rotate(-104.1 293.9 27.1)"/>
+                <ellipse class="trait" cx="302" cy="36" rx="5.6" ry="2.9" transform="rotate(19.9 302 36)"/>
+                <path class="trait" d="M250 110 C262 100 288 88 322 84"/>
+                <path class="trait fin" d="M274.2 96.2 L282.6 78"/>
+                <ellipse class="trait" cx="273.5" cy="83.2" rx="5.6" ry="2.9" transform="rotate(-127.1 273.5 83.2)"/>
+                <ellipse class="trait" cx="284.4" cy="88.3" rx="5.6" ry="2.9" transform="rotate(-3.1 284.4 88.3)"/>
+                <ellipse class="trait" cx="277.8" cy="74.2" rx="5.6" ry="2.9" transform="rotate(-127.1 277.8 74.2)"/>
+                <ellipse class="trait" cx="288.6" cy="79.2" rx="5.6" ry="2.9" transform="rotate(-3.1 288.6 79.2)"/>
+                <path class="trait fin" d="M298.1 88.3 L315.8 97.6"/>
+                <ellipse class="trait" cx="311.1" cy="88.4" rx="5.6" ry="2.9" transform="rotate(-34.4 311.1 88.4)"/>
+                <ellipse class="trait" cx="305.5" cy="99" rx="5.6" ry="2.9" transform="rotate(89.6 305.5 99)"/>
+                <ellipse class="trait" cx="319.9" cy="93" rx="5.6" ry="2.9" transform="rotate(-34.4 319.9 93)"/>
+                <ellipse class="trait" cx="314.4" cy="103.6" rx="5.6" ry="2.9" transform="rotate(89.6 314.4 103.6)"/>
+                <path class="trait fin" d="M322 84 L341.8 81.5"/>
+                <ellipse class="trait" cx="332.7" cy="76.6" rx="5.6" ry="2.9" transform="rotate(-69.2 332.7 76.6)"/>
+                <ellipse class="trait" cx="334.2" cy="88.5" rx="5.6" ry="2.9" transform="rotate(54.8 334.2 88.5)"/>
+                <ellipse class="trait" cx="342.6" cy="75.4" rx="5.6" ry="2.9" transform="rotate(-69.2 342.6 75.4)"/>
+                <ellipse class="trait" cx="344.1" cy="87.3" rx="5.6" ry="2.9" transform="rotate(54.8 344.1 87.3)"/>
+                <path class="trait fin" d="M243 104 C239 112 236 120 233 127"/>
+                <path class="trait" d="M-9 0 C-9 -4.5 -3 -5 -1 -3 C0 -2.4 1 -2.4 2 -3 C4 -5 9 -4.5 9 0 C9 4.5 4 5 2 3 C1 2.4 0 2.4 -1 3 C-3 5 -9 4.5 -9 0 Z" transform="translate(231 131) rotate(25) scale(0.8)"/>
+                <path class="trait fin" d="M257 104 C262 112 266 120 268 127"/>
+                <path class="trait" d="M-9 0 C-9 -4.5 -3 -5 -1 -3 C0 -2.4 1 -2.4 2 -3 C4 -5 9 -4.5 9 0 C9 4.5 4 5 2 3 C1 2.4 0 2.4 -1 3 C-3 5 -9 4.5 -9 0 Z" transform="translate(270 131) rotate(-20) scale(0.8)"/>
+                <path class="trait racine" d="M250 110 C251 140 246 175 252 210 C257 245 250 280 254 320"/>
+                <path class="trait racine" d="M251 128 C236 136 222 140 206 152 C194 161 186 172 176 178"/>
+                <path class="trait racine" d="M206 152 C202 162 200 172 200 186"/>
+                <path class="trait racine" d="M251 134 C266 142 282 144 296 152 C308 159 318 163 332 164"/>
+                <path class="trait racine" d="M249 166 C232 173 216 187 206 205 C200 216 190 226 178 232"/>
+                <path class="trait racine" d="M250 170 C268 167 292 167 311 172 C324 175 334 182 344 192"/>
+                <path class="trait racine" d="M252 214 C236 226 222 244 214 268 C210 282 206 296 200 312"/>
+                <path class="trait racine" d="M214 268 C224 276 232 286 236 300"/>
+                <path class="trait racine" d="M253 222 C270 232 290 246 302 266 C310 280 318 292 330 306"/>
+                <path class="trait" d="M394.3 64.3 L184.3 274.3 A8 8 0 0 0 195.7 285.7 L405.7 75.7"/>
+                <path class="trait" d="M393.6 63.6 L396.5 60.8 L409.2 73.5 L406.4 76.4 Z"/>
+                <rect class="trait" x="-14" y="-5" width="28" height="10" rx="2" transform="translate(305 165) rotate(135)"/>
+                <path class="trait" d="M-2 5 L4 5" transform="translate(305 165) rotate(135)" stroke-width="2.5"/>
+                <path class="trait fin" d="M314.9 155.1 L402.8 67.2 C410.8 57.2 418 50 436 48"/>
+                <g class="repere"><circle class="trait" cx="311" cy="171" r="15" stroke-dasharray="3 3"/><path class="trait" d="M311 186 L311 320"/></g>
+          </svg>
+          <div class="figure-cadre">
+            <div class="panneaux">
+                  <div class="panneau">
+                    <p class="panneau-titre">Image brute</p>
+                    <img data-panneau="brute" src="../assets/img/racines/denses-brute.webp" width="736" height="552" alt="Image brute de minirhizotron&#8239;: plusieurs racines d’arachide, dont une grosse racine verticale.">
+                  </div>
+                  <div class="panneau">
+                    <p class="panneau-titre">Racines détectées</p>
+                    <img data-panneau="detectees" src="../assets/img/racines/denses-detectees.webp" width="736" height="552" alt="Même image&#8239;: les racines détectées sont colorées en bleu.">
+                  </div>
+                  <div class="panneau">
+                    <p class="panneau-titre">Mesures</p>
+                    <img data-panneau="mesures" src="../assets/img/racines/denses-mesures.webp" width="736" height="552" alt="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur.">
+                  </div>
+            </div>
+            <dl class="figure-mesures">
+              <div><dt>Longueur</dt><dd data-mesure="longueur">67,1 mm</dd></div>
+              <div><dt>Diamètre moyen</dt><dd data-mesure="diametre">0,34 mm</dd></div>
+              <div><dt>Intensité racinaire</dt><dd data-mesure="intensite">27,6 mm/cm²</dd></div>
+            </dl>
+          </div>
+          <div class="figure-commandes" hidden>
+            <div class="exemples" role="group" aria-label="Choisir un exemple">
+                <button type="button" class="exemple" data-cle="denses" data-largeur="736" data-hauteur="552" aria-pressed="true" data-brute="Image brute de minirhizotron&#8239;: plusieurs racines d’arachide, dont une grosse racine verticale." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="67,1 mm" data-diametre="0,34 mm" data-intensite="27,6 mm/cm²">Racines denses</button>
+                <button type="button" class="exemple" data-cle="fines" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: quelques racines fines, peu contrastées." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="31,5 mm" data-diametre="0,21 mm" data-intensite="12,9 mm/cm²">Racines fines</button>
+                <button type="button" class="exemple" data-cle="sombre" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: image sombre traversée par quelques racines." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="48,7 mm" data-diametre="0,25 mm" data-intensite="20,0 mm/cm²">Image sombre</button>
+                <button type="button" class="exemple" data-cle="orangee" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol aux tons orangés, traversé par plusieurs racines brunes." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="54,9 mm" data-diametre="0,30 mm" data-intensite="22,6 mm/cm²">Image orangée</button>
+                <button type="button" class="exemple" data-cle="sans-racine" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol sans racine." data-detectees="Même image&#8239;: aucune racine détectée." data-mesures="Même image assombrie&#8239;: aucune racine à mesurer." data-longueur="0,0 mm" data-diametre="aucune racine" data-intensite="0,0 mm/cm²">Sans racine</button>
+            </div>
+            <button class="figure-lecture" type="button">Mettre en pause</button>
+          </div>
+          <p class="figure-source">
+            <span>Images&#8239;: <a href="https://datadryad.org/dataset/doi:10.5061/dryad.2v6wwpzp4">jeu de données PRMI</a> (Xu et al., 2022), licence CC0</span>
+            <span class="figure-liens"><a href="https://rootseg.streamlit.app">Démo en ligne</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></span>
+          </p>
+        </figure>
+      </section>
+
+      <section class="section" aria-labelledby="probleme-titre">
+        <header class="section-entete">
+          <div class="section-titre">
+            <p class="section-etiquette">Le problème</p>
+            <h2 id="probleme-titre">Des milliers d’images, mesurées à la main</h2>
+          </div>
+        </header>
+        <div class="etude-colonnes">
+          <div class="etude-texte">
+            <p>Un minirhizotron est un tube transparent enfoncé en biais dans le sol, près des plantes. Une caméra descend dans le tube et photographie les racines qui poussent contre la paroi, position après position, date après date.</p>
+            <p>On suit ainsi l’enracinement sans arracher les plantes. Mais une saison produit des milliers d’images, et mesurer chaque racine à la main prend des semaines.</p>
+            <p>J’ai travaillé sur le jeu de données public PRMI (arachide), sous licence CC0.</p>
+          </div>
+          <figure class="schema">
+            <svg class="schema-dessin" viewBox="130 0 380 320" role="img" aria-labelledby="schema1-titre">
+              <title id="schema1-titre">Schéma d’un minirhizotron : plant d’arachide, racines, tube transparent enfoncé en biais dans le sol, caméra dans le tube et fenêtre d’observation entourée.</title>
+              <path class="trait" d="M10 110 C90 107 170 113 250 110 S410 107 590 111"/>
+              <g class="grains"><circle cx="153.3" cy="224.5" r="1"/><circle cx="370.4" cy="132.6" r="1"/><circle cx="27.4" cy="280.8" r="1"/><circle cx="165.2" cy="165" r="1"/><circle cx="577.6" cy="210.3" r="1"/><circle cx="488.4" cy="211.5" r="1"/><circle cx="375.5" cy="286.7" r="1"/><circle cx="313" cy="262.3" r="1"/><circle cx="444.6" cy="233.5" r="1"/><circle cx="188.7" cy="126" r="1"/><circle cx="422.5" cy="288.7" r="1"/><circle cx="241.2" cy="273.8" r="1"/><circle cx="269" cy="299.6" r="1"/><circle cx="512.2" cy="138.7" r="1"/><circle cx="96.1" cy="161.7" r="1"/><circle cx="370.9" cy="177.8" r="1"/><circle cx="304.1" cy="194.1" r="1"/><circle cx="216.5" cy="232.3" r="1"/><circle cx="347.2" cy="293.6" r="1"/><circle cx="499.6" cy="310.3" r="1"/><circle cx="395.9" cy="151.3" r="1"/><circle cx="526.6" cy="229.3" r="1"/><circle cx="69.6" cy="273.7" r="1"/><circle cx="249.9" cy="148.9" r="1"/><circle cx="184.6" cy="267.6" r="1"/><circle cx="422.3" cy="183.5" r="1"/><circle cx="303" cy="311.7" r="1"/><circle cx="130.5" cy="198.3" r="1"/><circle cx="195.7" cy="304.1" r="1"/><circle cx="522.1" cy="192.5" r="1"/><circle cx="277.8" cy="219.9" r="1"/><circle cx="380.6" cy="234.4" r="1"/><circle cx="333.2" cy="239.1" r="1"/><circle cx="327.1" cy="122.2" r="1"/><circle cx="31.2" cy="238.2" r="1"/><circle cx="371.3" cy="209.5" r="1"/><circle cx="415.9" cy="261.7" r="1"/><circle cx="32.4" cy="131.6" r="1"/><circle cx="398.6" cy="305" r="1"/><circle cx="223.8" cy="180" r="1"/><circle cx="188.2" cy="192.4" r="1"/><circle cx="452.5" cy="125.2" r="1"/><circle cx="193.6" cy="162.7" r="1"/><circle cx="470.1" cy="165.8" r="1"/><circle cx="146" cy="143.2" r="1"/><circle cx="471.8" cy="281" r="1"/></g>
+              <path class="trait" d="M250 110 C240 100 214 90 180 86"/>
+              <path class="trait fin" d="M227.5 97 L208.8 104"/>
+              <ellipse class="trait" cx="218.8" cy="106.7" rx="5.6" ry="2.9" transform="rotate(-262.4 218.8 106.7)"/>
+              <ellipse class="trait" cx="214.6" cy="95.4" rx="5.6" ry="2.9" transform="rotate(-138.4 214.6 95.4)"/>
+              <ellipse class="trait" cx="209.5" cy="110.2" rx="5.6" ry="2.9" transform="rotate(-262.4 209.5 110.2)"/>
+              <ellipse class="trait" cx="205.3" cy="98.9" rx="5.6" ry="2.9" transform="rotate(-138.4 205.3 98.9)"/>
+              <path class="trait fin" d="M203.9 90 L192.4 73.6"/>
+              <ellipse class="trait" cx="192.4" cy="84" rx="5.6" ry="2.9" transform="rotate(-187 192.4 84)"/>
+              <ellipse class="trait" cx="202.2" cy="77.2" rx="5.6" ry="2.9" transform="rotate(-63 202.2 77.2)"/>
+              <ellipse class="trait" cx="186.6" cy="75.9" rx="5.6" ry="2.9" transform="rotate(-187 186.6 75.9)"/>
+              <ellipse class="trait" cx="196.5" cy="69" rx="5.6" ry="2.9" transform="rotate(-63 196.5 69)"/>
+              <path class="trait fin" d="M180 86 L160.2 83.5"/>
+              <ellipse class="trait" cx="167.9" cy="90.5" rx="5.6" ry="2.9" transform="rotate(-234.9 167.9 90.5)"/>
+              <ellipse class="trait" cx="169.3" cy="78.6" rx="5.6" ry="2.9" transform="rotate(-110.9 169.3 78.6)"/>
+              <ellipse class="trait" cx="157.9" cy="89.3" rx="5.6" ry="2.9" transform="rotate(-234.9 157.9 89.3)"/>
+              <ellipse class="trait" cx="159.4" cy="77.4" rx="5.6" ry="2.9" transform="rotate(-110.9 159.4 77.4)"/>
+              <path class="trait" d="M250 110 C238 88 222 66 204 54"/>
+              <path class="trait fin" d="M231.6 81.2 L211.9 77.4"/>
+              <ellipse class="trait" cx="219.1" cy="84.9" rx="5.6" ry="2.9" transform="rotate(-230.9 219.1 84.9)"/>
+              <ellipse class="trait" cx="221.4" cy="73.1" rx="5.6" ry="2.9" transform="rotate(-106.9 221.4 73.1)"/>
+              <ellipse class="trait" cx="209.3" cy="83" rx="5.6" ry="2.9" transform="rotate(-230.9 209.3 83)"/>
+              <ellipse class="trait" cx="211.6" cy="71.2" rx="5.6" ry="2.9" transform="rotate(-106.9 211.6 71.2)"/>
+              <path class="trait fin" d="M217.1 64.7 L215.9 44.8"/>
+              <ellipse class="trait" cx="210.4" cy="53.6" rx="5.6" ry="2.9" transform="rotate(-155.3 210.4 53.6)"/>
+              <ellipse class="trait" cx="222.4" cy="52.9" rx="5.6" ry="2.9" transform="rotate(-31.3 222.4 52.9)"/>
+              <ellipse class="trait" cx="209.8" cy="43.6" rx="5.6" ry="2.9" transform="rotate(-155.3 209.8 43.6)"/>
+              <ellipse class="trait" cx="221.8" cy="42.9" rx="5.6" ry="2.9" transform="rotate(-31.3 221.8 42.9)"/>
+              <path class="trait fin" d="M204 54 L187.5 42.7"/>
+              <ellipse class="trait" cx="191.1" cy="52.4" rx="5.6" ry="2.9" transform="rotate(-207.6 191.1 52.4)"/>
+              <ellipse class="trait" cx="197.9" cy="42.5" rx="5.6" ry="2.9" transform="rotate(-83.6 197.9 42.5)"/>
+              <ellipse class="trait" cx="182.9" cy="46.8" rx="5.6" ry="2.9" transform="rotate(-207.6 182.9 46.8)"/>
+              <ellipse class="trait" cx="189.7" cy="36.9" rx="5.6" ry="2.9" transform="rotate(-83.6 189.7 36.9)"/>
+              <path class="trait" d="M250 110 C248 84 246 60 240 42"/>
+              <path class="trait fin" d="M246.9 76.5 L231.9 63.3"/>
+              <ellipse class="trait" cx="234.3" cy="73.4" rx="5.6" ry="2.9" transform="rotate(-200.7 234.3 73.4)"/>
+              <ellipse class="trait" cx="242.3" cy="64.4" rx="5.6" ry="2.9" transform="rotate(-76.7 242.3 64.4)"/>
+              <ellipse class="trait" cx="226.8" cy="66.8" rx="5.6" ry="2.9" transform="rotate(-200.7 226.8 66.8)"/>
+              <ellipse class="trait" cx="234.7" cy="57.8" rx="5.6" ry="2.9" transform="rotate(-76.7 234.7 57.8)"/>
+              <path class="trait fin" d="M243.8 56.6 L254 39.4"/>
+              <ellipse class="trait" cx="244.5" cy="43.6" rx="5.6" ry="2.9" transform="rotate(-121.3 244.5 43.6)"/>
+              <ellipse class="trait" cx="254.8" cy="49.7" rx="5.6" ry="2.9" transform="rotate(2.7 254.8 49.7)"/>
+              <ellipse class="trait" cx="249.6" cy="35" rx="5.6" ry="2.9" transform="rotate(-121.3 249.6 35)"/>
+              <ellipse class="trait" cx="260" cy="41.1" rx="5.6" ry="2.9" transform="rotate(2.7 260 41.1)"/>
+              <path class="trait fin" d="M240 42 L233.8 23"/>
+              <ellipse class="trait" cx="230.8" cy="32.9" rx="5.6" ry="2.9" transform="rotate(-169.9 230.8 32.9)"/>
+              <ellipse class="trait" cx="242.2" cy="29.2" rx="5.6" ry="2.9" transform="rotate(-45.9 242.2 29.2)"/>
+              <ellipse class="trait" cx="227.7" cy="23.4" rx="5.6" ry="2.9" transform="rotate(-169.9 227.7 23.4)"/>
+              <ellipse class="trait" cx="239.1" cy="19.7" rx="5.6" ry="2.9" transform="rotate(-45.9 239.1 19.7)"/>
+              <path class="trait" d="M250 110 C256 84 266 60 282 46"/>
+              <path class="trait fin" d="M260.7 76.8 L254.3 57.9"/>
+              <ellipse class="trait" cx="251.4" cy="67.9" rx="5.6" ry="2.9" transform="rotate(-170.6 251.4 67.9)"/>
+              <ellipse class="trait" cx="262.7" cy="64" rx="5.6" ry="2.9" transform="rotate(-46.6 262.7 64)"/>
+              <ellipse class="trait" cx="248.2" cy="58.4" rx="5.6" ry="2.9" transform="rotate(-170.6 248.2 58.4)"/>
+              <ellipse class="trait" cx="259.6" cy="54.6" rx="5.6" ry="2.9" transform="rotate(-46.6 259.6 54.6)"/>
+              <path class="trait fin" d="M271.1 58.2 L290.6 53.6"/>
+              <ellipse class="trait" cx="280.9" cy="49.8" rx="5.6" ry="2.9" transform="rotate(-75.3 280.9 49.8)"/>
+              <ellipse class="trait" cx="283.7" cy="61.4" rx="5.6" ry="2.9" transform="rotate(48.7 283.7 61.4)"/>
+              <ellipse class="trait" cx="290.6" cy="47.5" rx="5.6" ry="2.9" transform="rotate(-75.3 290.6 47.5)"/>
+              <ellipse class="trait" cx="293.4" cy="59.1" rx="5.6" ry="2.9" transform="rotate(48.7 293.4 59.1)"/>
+              <path class="trait fin" d="M282 46 L296.8 32.6"/>
+              <ellipse class="trait" cx="286.5" cy="33.8" rx="5.6" ry="2.9" transform="rotate(-104.1 286.5 33.8)"/>
+              <ellipse class="trait" cx="294.6" cy="42.7" rx="5.6" ry="2.9" transform="rotate(19.9 294.6 42.7)"/>
+              <ellipse class="trait" cx="293.9" cy="27.1" rx="5.6" ry="2.9" transform="rotate(-104.1 293.9 27.1)"/>
+              <ellipse class="trait" cx="302" cy="36" rx="5.6" ry="2.9" transform="rotate(19.9 302 36)"/>
+              <path class="trait" d="M250 110 C262 100 288 88 322 84"/>
+              <path class="trait fin" d="M274.2 96.2 L282.6 78"/>
+              <ellipse class="trait" cx="273.5" cy="83.2" rx="5.6" ry="2.9" transform="rotate(-127.1 273.5 83.2)"/>
+              <ellipse class="trait" cx="284.4" cy="88.3" rx="5.6" ry="2.9" transform="rotate(-3.1 284.4 88.3)"/>
+              <ellipse class="trait" cx="277.8" cy="74.2" rx="5.6" ry="2.9" transform="rotate(-127.1 277.8 74.2)"/>
+              <ellipse class="trait" cx="288.6" cy="79.2" rx="5.6" ry="2.9" transform="rotate(-3.1 288.6 79.2)"/>
+              <path class="trait fin" d="M298.1 88.3 L315.8 97.6"/>
+              <ellipse class="trait" cx="311.1" cy="88.4" rx="5.6" ry="2.9" transform="rotate(-34.4 311.1 88.4)"/>
+              <ellipse class="trait" cx="305.5" cy="99" rx="5.6" ry="2.9" transform="rotate(89.6 305.5 99)"/>
+              <ellipse class="trait" cx="319.9" cy="93" rx="5.6" ry="2.9" transform="rotate(-34.4 319.9 93)"/>
+              <ellipse class="trait" cx="314.4" cy="103.6" rx="5.6" ry="2.9" transform="rotate(89.6 314.4 103.6)"/>
+              <path class="trait fin" d="M322 84 L341.8 81.5"/>
+              <ellipse class="trait" cx="332.7" cy="76.6" rx="5.6" ry="2.9" transform="rotate(-69.2 332.7 76.6)"/>
+              <ellipse class="trait" cx="334.2" cy="88.5" rx="5.6" ry="2.9" transform="rotate(54.8 334.2 88.5)"/>
+              <ellipse class="trait" cx="342.6" cy="75.4" rx="5.6" ry="2.9" transform="rotate(-69.2 342.6 75.4)"/>
+              <ellipse class="trait" cx="344.1" cy="87.3" rx="5.6" ry="2.9" transform="rotate(54.8 344.1 87.3)"/>
+              <path class="trait fin" d="M243 104 C239 112 236 120 233 127"/>
+              <path class="trait" d="M-9 0 C-9 -4.5 -3 -5 -1 -3 C0 -2.4 1 -2.4 2 -3 C4 -5 9 -4.5 9 0 C9 4.5 4 5 2 3 C1 2.4 0 2.4 -1 3 C-3 5 -9 4.5 -9 0 Z" transform="translate(231 131) rotate(25) scale(0.8)"/>
+              <path class="trait fin" d="M257 104 C262 112 266 120 268 127"/>
+              <path class="trait" d="M-9 0 C-9 -4.5 -3 -5 -1 -3 C0 -2.4 1 -2.4 2 -3 C4 -5 9 -4.5 9 0 C9 4.5 4 5 2 3 C1 2.4 0 2.4 -1 3 C-3 5 -9 4.5 -9 0 Z" transform="translate(270 131) rotate(-20) scale(0.8)"/>
+              <path class="trait racine" d="M250 110 C251 140 246 175 252 210 C257 245 250 280 254 320"/>
+              <path class="trait racine" d="M251 128 C236 136 222 140 206 152 C194 161 186 172 176 178"/>
+              <path class="trait racine" d="M206 152 C202 162 200 172 200 186"/>
+              <path class="trait racine" d="M251 134 C266 142 282 144 296 152 C308 159 318 163 332 164"/>
+              <path class="trait racine" d="M249 166 C232 173 216 187 206 205 C200 216 190 226 178 232"/>
+              <path class="trait racine" d="M250 170 C268 167 292 167 311 172 C324 175 334 182 344 192"/>
+              <path class="trait racine" d="M252 214 C236 226 222 244 214 268 C210 282 206 296 200 312"/>
+              <path class="trait racine" d="M214 268 C224 276 232 286 236 300"/>
+              <path class="trait racine" d="M253 222 C270 232 290 246 302 266 C310 280 318 292 330 306"/>
+              <path class="trait" d="M394.3 64.3 L184.3 274.3 A8 8 0 0 0 195.7 285.7 L405.7 75.7"/>
+              <path class="trait" d="M393.6 63.6 L396.5 60.8 L409.2 73.5 L406.4 76.4 Z"/>
+              <rect class="trait" x="-14" y="-5" width="28" height="10" rx="2" transform="translate(305 165) rotate(135)"/>
+              <path class="trait" d="M-2 5 L4 5" transform="translate(305 165) rotate(135)" stroke-width="2.5"/>
+              <path class="trait fin" d="M314.9 155.1 L402.8 67.2 C410.8 57.2 418 50 436 48"/>
+              <g class="repere"><circle class="trait" cx="311" cy="171" r="15" stroke-dasharray="3 3"/></g>
+              <g class="marque"><circle cx="372" cy="92" r="9"/><text x="372" y="92">1</text></g><g class="marque"><circle cx="288" cy="150" r="9"/><text x="288" y="150">2</text></g><g class="marque"><circle cx="334" cy="186" r="9"/><text x="334" y="186">3</text></g><g class="marque"><circle cx="196" cy="214" r="9"/><text x="196" y="214">4</text></g>
+            </svg>
+            <figcaption>
+              <p class="schema-numero">Schéma 1 · Le principe du minirhizotron</p>
+              <ol class="schema-legende">
+                <li>Tube transparent, enfoncé en biais dans le sol.</li>
+                <li>Caméra, descendue dans le tube.</li>
+                <li>Fenêtre d’observation&#8239;: ce que voit une image.</li>
+                <li>Racines qui poussent contre la paroi.</li>
+              </ol>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section bande" aria-labelledby="donnees-titre">
+        <header class="section-entete">
+          <div class="section-titre">
+            <p class="section-etiquette">Les données</p>
+            <h2 id="donnees-titre">Des images difficiles, des annotations imparfaites</h2>
+          </div>
+        </header>
+        <div class="etude-texte">
+          <p>Les images d’un minirhizotron sont prises dans le sol, à travers un tube, sur des semaines. Leur qualité varie beaucoup&#8239;: séances entières à dominante orange ou en gris, éclairage inégal, gouttes d’eau sur la paroi, images surexposées. Plus de quatre images sur dix ne contiennent aucune racine, et certaines racines sont si fines ou si peu contrastées que l’annotateur lui-même hésite.</p>
+        </div>
+        <figure class="figure-simple " aria-labelledby="fig2-titre">
+          <figcaption>
+            <p class="figure-numero">Figure 2</p>
+            <p class="figure-titre" id="fig2-titre">Des images très variées, et souvent difficiles</p>
+            <p class="figure-description">Huit images du jeu, telles que prises dans le tube. Plus de quatre images sur dix ne contiennent aucune racine&#8239;; ailleurs se côtoient grosses racines et radicelles, et certaines racines sont à peine visibles, même pour l’annotateur. La couleur et l’éclairage changent d’une séance à l’autre, et l’autre caméra laisse des bords inutilisables.</p>
+          </figcaption>
+          <div class="figure-cadre"><img src="../assets/img/racines/diversite.webp" width="1532" height="656" loading="lazy" alt="Huit images de minirhizotron d’arachide&#8239;: sans racine, grosse racine et radicelles, racines à peine visibles, séance à dominante orange, séance en niveaux de gris, image surexposée, gouttes d’eau sur la paroi, autre caméra aux bords sombres."></div>
+          <p class="figure-source"><span>Images&#8239;: <a href="https://datadryad.org/dataset/doi:10.5061/dryad.2v6wwpzp4">jeu de données PRMI</a> (Xu et al., 2022), licence CC0</span></p>
+        </figure>
+        <div class="etude-texte">
+          <p>Pour apprendre à reconnaître les racines, un modèle a besoin d’exemples annotés&#8239;: des images où quelqu’un a tracé les racines. Celles du jeu public sont tracées en chaînes de rectangles&#8239;:</p>
+          <ul class="fiche-points">
+            <li><strong>Fendues</strong>&#8239;: il reste des trous entre les rectangles.</li>
+            <li><strong>Grossières</strong>&#8239;: des rectangles de largeur fixe, quelle que soit l’épaisseur de la racine.</li>
+            <li><strong>Incomplètes</strong>&#8239;: des racines sont oubliées.</li>
+            <li>Selon les jeux, les tracés sont même <strong>décalés</strong> par rapport aux racines.</li>
+          </ul>
+          <p>Un modèle qui apprend sur ces exemples apprend aussi leurs erreurs. Et le juger sur ces mêmes exemples ne dit pas s’il mesure juste.</p>
+        </div>
+        <figure class="schema schema-large">
+          <div class="defauts">
+            <div class="defaut">
+              <svg viewBox="0 0 204 140" role="img" aria-label="Annotation correcte : Les rectangles recouvrent la racine."><path class="racine" d="M18 34 C70 20 120 120 186 104"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(24.2 32.9) rotate(-5.8)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(42.9 35.1) rotate(17.7)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(61.6 44) rotate(31.3)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(80.6 57.2) rotate(37.2)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(100 72.3) rotate(37.7)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(120.1 86.9) rotate(33.6)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(141 98.7) rotate(24)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(162.9 105.1) rotate(7.8)"/></svg>
+              <p>Annotation correcte</p>
+            </div>
+            <div class="defaut">
+              <svg viewBox="0 0 204 140" role="img" aria-label="Décalée : Les rectangles passent à côté de la racine."><path class="racine" d="M18 34 C70 20 120 120 186 104"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(25.5 45.8) rotate(-5.8)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(38.9 47.5) rotate(17.7)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(54.8 55.1) rotate(31.3)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(72.7 67.6) rotate(37.2)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(92.1 82.6) rotate(37.7)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(112.9 97.7) rotate(33.6)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(135.7 110.5) rotate(24)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(161.1 118) rotate(7.8)"/></svg>
+              <p>Décalée</p>
+            </div>
+            <div class="defaut">
+              <svg viewBox="0 0 204 140" role="img" aria-label="Fendue : Il reste des trous entre les rectangles."><path class="racine" d="M18 34 C70 20 120 120 186 104"/><rect class="annotation" x="-6.5" y="-6" width="13" height="12" transform="translate(24.2 32.9) rotate(-5.8)"/><rect class="annotation" x="-6.5" y="-6" width="13" height="12" transform="translate(42.9 35.1) rotate(17.7)"/><rect class="annotation" x="-6.5" y="-6" width="13" height="12" transform="translate(61.6 44) rotate(31.3)"/><rect class="annotation" x="-6.5" y="-6" width="13" height="12" transform="translate(80.6 57.2) rotate(37.2)"/><rect class="annotation" x="-6.5" y="-6" width="13" height="12" transform="translate(100 72.3) rotate(37.7)"/><rect class="annotation" x="-6.5" y="-6" width="13" height="12" transform="translate(120.1 86.9) rotate(33.6)"/><rect class="annotation" x="-6.5" y="-6" width="13" height="12" transform="translate(141 98.7) rotate(24)"/><rect class="annotation" x="-6.5" y="-6" width="13" height="12" transform="translate(162.9 105.1) rotate(7.8)"/></svg>
+              <p>Fendue</p>
+            </div>
+            <div class="defaut">
+              <svg viewBox="0 0 204 140" role="img" aria-label="Racine oubliée : La racine principale est annotée, pas sa ramification."><path class="racine" d="M18 34 C70 20 120 120 186 104"/><path class="racine" d="M104 72 C112 92 116 108 114 132"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(24.2 32.9) rotate(-5.8)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(42.9 35.1) rotate(17.7)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(61.6 44) rotate(31.3)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(80.6 57.2) rotate(37.2)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(100 72.3) rotate(37.7)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(120.1 86.9) rotate(33.6)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(141 98.7) rotate(24)"/><rect class="annotation" x="-13" y="-6" width="26" height="12" transform="translate(162.9 105.1) rotate(7.8)"/></svg>
+              <p>Racine oubliée</p>
+            </div>
+          </div>
+          <figcaption><p class="schema-numero">Schéma 2 · Une même racine (trait gris) et son annotation (rectangles bleus)</p></figcaption>
+        </figure>
+      </section>
+
+      <section class="section" aria-labelledby="methode-titre">
+        <header class="section-entete">
+          <div class="section-titre">
+            <p class="section-etiquette">Ce que j’ai fait</p>
+            <h2 id="methode-titre">Corriger ce qui compte, automatiser le reste</h2>
+          </div>
+        </header>
+        <ol class="liste-etapes">
+          <li><strong>Corriger les images avant tout</strong>&#8239;: retirer les bords inutilisables, corriger l’éclairage inégal, ramener les couleurs à la normale, image par image (figure&#8239;3).</li>
+          <li><strong>Corriger à la main 273 images</strong>, pour entraîner le modèle, le régler et surtout le tester sur une référence fiable.</li>
+          <li><strong>Combler automatiquement les fentes</strong> des autres annotations, avec une méthode vérifiée contre les corrections manuelles.</li>
+          <li><strong>Entraîner un réseau de neurones de segmentation (U-Net)</strong> sur 11&#8239;485 images.</li>
+          <li><strong>Ajouter un filtre qui retire les fausses détections</strong>, sans réentraîner le réseau.</li>
+          <li><strong>Vérifier l’échelle sur les données</strong>&#8239;: le «&#8239;150 DPI&#8239;» indiqué dans les métadonnées était faux d’un facteur 7. Sans cette vérification, toutes les longueurs auraient été fausses.</li>
+        </ol>
+        <figure class="figure-simple figure-etroite" aria-labelledby="fig3-titre">
+          <figcaption>
+            <p class="figure-numero">Figure 3</p>
+            <p class="figure-titre" id="fig3-titre">Corriger les images avant d’y chercher des racines</p>
+            <p class="figure-description">En haut, une image de l’autre caméra&#8239;: bords inutilisables retirés, bord gauche assombri corrigé. En bas, une séance à dominante orange&#8239;: les couleurs sont ramenées à la normale, image par image. Le réseau voit ainsi des images comparables, quelle que soit la séance.</p>
+          </figcaption>
+          <div class="figure-cadre"><img src="../assets/img/racines/pretraitement.webp" width="1152" height="656" loading="lazy" alt="Deux images avant et après le prétraitement&#8239;: bords retirés et éclairage corrigé, puis couleurs normalisées&#8239;; en bas, une image à dominante orange ramenée à des couleurs normales."></div>
+          <p class="figure-source"><span>Images&#8239;: <a href="https://datadryad.org/dataset/doi:10.5061/dryad.2v6wwpzp4">jeu de données PRMI</a> (Xu et al., 2022), licence CC0</span></p>
+        </figure>
+        <figure class="schema schema-large">
+          <ol class="chaine">
+            <li><strong>Image</strong><span>prise dans le tube</span></li>
+            <li><strong>Prétraitement</strong><span>recadrage, correction de l’éclairage inégal</span></li>
+            <li><strong>U-Net</strong><span>repère les racines, pixel par pixel</span></li>
+            <li><strong>Filtre</strong><span>retire les fausses détections</span></li>
+            <li><strong>Mesures</strong><span>longueur, diamètre, intensité racinaire</span></li>
+          </ol>
+          <figcaption><p class="schema-numero">Schéma 3 · La chaîne de traitement, de l’image aux mesures</p></figcaption>
+        </figure>
+        <p class="etude-texte etude-livraison">Livré sous forme d’outil&#8239;: une commande qui produit les mesures par image et par tube, date et profondeur, une API web, une image Docker et une démo en ligne.</p>
+      </section>
+
+      <section class="section bande" aria-labelledby="resultats-titre">
+        <header class="section-entete">
+          <div class="section-titre">
+            <p class="section-etiquette">Résultats et limites</p>
+            <h2 id="resultats-titre">Ce que l’outil fait bien, et ce qu’il ne fait pas</h2>
+          </div>
+          <p class="section-chapo">Évalué une seule fois, à la fin, sur des tubes jamais vus pendant le développement.</p>
+        </header>
+        <div class="bilan">
+          <div>
+            <h3>Résultats</h3>
+            <ul class="fiche-points">
+              <li>Recouvrement médian (Dice) de 0,79 sur 50 images corrigées à la main, 0,74 sur 4&#8239;743 images, et 0,79 sur 3&#8239;542 images d’une autre caméra jamais vue&#8239;; du même ordre que l’état de l’art publié sur ces images, sans y être directement comparable.</li>
+              <li>Fausses alertes sur les images sans racine divisées par 3 à 4 grâce au filtre.</li>
+              <li>Longueur totale des racines à 7,5&#8239;% près après étalonnage&#8239;; diamètre juste à quelques pour cent près pour les racines d’au moins 0,25&#8239;mm environ.</li>
+              <li>Environ 360 images par minute sur un ordinateur portable, sans carte graphique.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Limites</h3>
+            <ul class="fiche-points">
+              <li>Les racines fines ou peu visibles sont en partie manquées&#8239;: la longueur est sous-estimée image par image. L’étalonnage corrige ce biais pour des totaux (par tube, par date), pas pour une image seule.</li>
+              <li>Le diamètre des racines de moins de 0,25&#8239;mm environ est surestimé.</li>
+              <li>L’outil est validé sur l’arachide et les caméras du jeu PRMI&#8239;; d’autres espèces ou caméras demanderaient une vérification.</li>
+              <li>Les corrections manuelles viennent d’un seul annotateur.</li>
+            </ul>
+          </div>
+        </div>
+        <figure class="figure-simple figure-etroite clair" aria-labelledby="fig4-titre">
+          <figcaption>
+            <p class="figure-numero">Figure 4</p>
+            <p class="figure-titre" id="fig4-titre">Ce que vous recevez&#8239;: le profil d’enracinement d’un tube, au fil de la saison</p>
+            <p class="figure-description">Intensité racinaire (millimètres de racine par cm² d’image) selon la profondeur, pour un même tube à trois dates de 2015, calculée automatiquement sur 282 images (94 positions par date). L’enracinement progresse entre juin et juillet. Ce profil suit de très près celui de l’annotation des mêmes images (corrélation de 0,99). Profondeur estimée à partir de la position de la caméra dans le tube.</p>
+          </figcaption>
+          <div class="figure-cadre figure-cadre-clair"><img src="../assets/img/racines/profil.webp" width="930" height="840" loading="lazy" alt="Graphique&#8239;: intensité racinaire selon la profondeur pour un même tube, le 4 juin, le 11 juin et le 22 juillet 2015&#8239;; elle augmente au fil de la saison, avec un maximum vers 70 cm de profondeur."></div>
+          <p class="figure-source"><span>Images&#8239;: <a href="https://datadryad.org/dataset/doi:10.5061/dryad.2v6wwpzp4">jeu de données PRMI</a> (Xu et al., 2022), licence CC0&#8239;; tube du jeu de test, jamais vu à l’entraînement</span></p>
+        </figure>
+        <figure class="figure-simple " aria-labelledby="fig5-titre">
+          <figcaption>
+            <p class="figure-numero">Figure 5</p>
+            <p class="figure-titre" id="fig5-titre">Retirer les fausses détections</p>
+            <p class="figure-description">Le réseau repère les racines (bleu), mais aussi parfois des objets qui leur ressemblent&#8239;: ici un débris clair au bord de l’image (rouge). Un second modèle, entraîné à reconnaître ces erreurs à leur taille, leur forme et leur contexte, les retire sans toucher aux vraies racines.</p>
+          </figcaption>
+          <div class="figure-cadre"><img src="../assets/img/racines/filtre.webp" width="1152" height="334" loading="lazy" alt="Trois vues d’une même image&#8239;: l’image, la détection du réseau seul avec une erreur en rouge au bord, et le résultat après le filtre, où l’erreur a disparu."></div>
+          <p class="figure-source"><span>Images&#8239;: <a href="https://datadryad.org/dataset/doi:10.5061/dryad.2v6wwpzp4">jeu de données PRMI</a> (Xu et al., 2022), licence CC0</span></p>
+        </figure>
+      </section>
+
+      <section class="section" aria-labelledby="lecon-titre">
+        <header class="section-entete">
+          <div class="section-titre">
+            <p class="section-etiquette">Ce que j’en retiens pour vos projets</p>
+            <h2 id="lecon-titre">Vérifier les données avant de mesurer</h2>
+          </div>
+        </header>
+        <div class="etude-texte">
+          <p>Les métadonnées annonçaient une échelle fausse d’un facteur 7, et les annotations publiques comptaient trous et oublis. Sans ces vérifications, l’outil aurait produit des mesures fausses avec de très bons scores. Corriger un petit lot d’annotations à la main a aidé&#8239;; ajouter des milliers d’images, même imparfaites, a aidé davantage.</p>
+          <p>Pour vos projets, avant de financer des semaines d’annotation soignée, une <a href="../index.html#offres">étude de faisabilité</a> permet de vérifier vos données et de mesurer ce qui rapporte vraiment.</p>
+        </div>
+      </section>
+
+      <section class="section bande" aria-labelledby="essayer-titre">
+        <header class="section-entete">
+          <div class="section-titre">
+            <p class="section-etiquette">Essayer</p>
+            <h2 id="essayer-titre">Voir l’outil, lire le code, en parler</h2>
+          </div>
+        </header>
+        <ul class="liens-essai">
+          <li><a href="https://rootseg.streamlit.app">Démo en ligne</a><span>Déposer une image, voir les racines et les mesures. La démo gratuite met environ une minute à se réveiller.</span></li>
+          <li><a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a><span>Le code, la fiche du modèle et le détail technique, en code ouvert.</span></li>
+        </ul>
+        <p class="section-action"><a class="bouton" href="../index.html#contact">Parlons de vos images</a></p>
+      </section>
+    </main>
+  </div>
+
+  <footer class="pied">
+    <div class="conteneur">
+      <div class="pied-contenu">
+        <p>François Faramus · Data scientist · Rennes</p>
+        <p>© 2026</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

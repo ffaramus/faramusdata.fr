@@ -34,26 +34,27 @@
 /* Variables */
 
 :root {
-  /* Couleurs. Le bleu canard est réservé aux liens et au bouton. */
+  /* Couleurs. Le bleu canard : liens, bouton et repères de lecture. */
   --couleur-accent: #0E6B78;
   --couleur-accent-fonce: #0A5560;
   --couleur-fond: #FAF8F4;
   --couleur-encre: #1F2A2E;
-  --couleur-texte-secondaire: #5B6B70;
+  --couleur-texte-secondaire: #4F5D62;
   --couleur-filet: #D9DEDC;
   --couleur-cadre: #111111;          /* cadre des figures, gris très foncé (fond de la vidéo) */
   --couleur-blanc: #FFFFFF;
+  --couleur-bande: #FFFFFF;           /* fond d'une section sur deux */
 
   /* Polices */
   --police-titre: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --police-texte: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --police-legende: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --taille-legende: 0.8125rem;
+  --taille-legende: 0.875rem;
   --graisse-logo: 600;
   --graisse-titre-figure: 500;
 
   /* Échelle typographique */
-  --taille-0: 0.8125rem;
+  --taille-0: 0.875rem;
   --taille-1: 0.9375rem;
   --taille-2: 1.0625rem;
   --taille-3: 1.125rem;
@@ -160,12 +161,12 @@ a:hover {
 
 .bouton {
   display: inline-block;
-  padding: 0.85em 1.5em;
+  padding: 0.95em 1.9em;
   border-radius: 4px;
   background: var(--couleur-accent);
   color: var(--couleur-blanc);
   font-family: var(--police-texte);
-  font-size: var(--taille-2);
+  font-size: var(--taille-3);
   font-weight: 600;
   line-height: 1.2;
   text-decoration: none;
@@ -304,60 +305,78 @@ a:hover {
   margin-top: var(--espace-1);
 }
 
+/* Bandes : une section sur deux sur fond blanc, sur toute la largeur de l'écran.
+   L'ombre étendue puis rognée prolonge le fond sans sortir du conteneur ni créer de défilement. */
+.bande {
+  background: var(--couleur-bande);
+  box-shadow: 0 0 0 100vmax var(--couleur-bande);
+  clip-path: inset(0 -100vmax);
+}
+
 .vitrine {
-  padding-block: var(--espace-6) var(--espace-9);
-  border-top: 1px solid var(--couleur-encre);
+  padding-block: var(--espace-8);
 }
 
 
-/* Sections de la page : filet foncé en tête, titre, chapô, puis contenu */
+/* Sections : une grille à deux colonnes partagée par toute la page.
+   À gauche (un tiers) : nom et titre de la section, dates et repères ; à droite : le contenu. */
 
 .section {
-  padding-block: var(--espace-6) var(--espace-9);
-  border-top: 1px solid var(--couleur-encre);
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  align-items: start;
+  column-gap: var(--espace-8);
+  row-gap: var(--espace-7);
+  padding-block: var(--espace-9);
 }
 
-.section-chapo {
-  max-width: var(--largeur-texte);
-  margin-top: var(--espace-3);
-  font-size: var(--taille-3);
+.section > * {
+  grid-column: 2;
 }
 
-/* En-tête de section : étiquette numérotée, titre fort, chapô */
-.section-entete {
-  max-width: 44rem;
+.section > .section-entete {
+  grid-column: 1;
+}
+
+/* Avec un chapô, l'en-tête occupe toute la ligne : titre à gauche, chapô à droite */
+.section > .section-entete:has(.section-chapo) {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  align-items: end;
+  column-gap: var(--espace-8);
+}
+
+.section > :is(.fiche, .frise, .schema-large, .bilan, .figure-simple:not(.figure-etroite)) {
+  grid-column: 1 / -1;
 }
 
 .section-etiquette {
   color: var(--couleur-accent);
-  font-family: var(--police-legende);
-  font-size: var(--taille-0);
+  font-size: var(--taille-2);
+  font-weight: 600;
 }
 
-.section-entete h2 {
+.section-titre h2 {
   margin-top: var(--espace-2);
-  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  font-size: clamp(1.625rem, 1.3rem + 1vw, 2rem);
   font-weight: 500;
   line-height: 1.2;
   text-wrap: balance;
 }
 
-.section-entete .section-chapo {
-  margin-top: var(--espace-4);
+.section-chapo {
+  max-width: 40rem;
+  font-size: var(--taille-3);
 }
 
-/* Fiches de réalisation : repères dans la marge, contenu à droite */
+/* Fiches (offres, projets) : repères dans la colonne de gauche, contenu à droite */
 .fiche {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
   column-gap: var(--espace-8);
-  margin-top: var(--espace-7);
-  padding-top: var(--espace-5);
+  padding-top: var(--espace-6);
   border-top: 1px solid var(--couleur-filet);
-}
-
-.section-entete + .fiche {
-  margin-top: var(--espace-7);
 }
 
 .fiche-marge p + p {
@@ -397,8 +416,7 @@ a:hover {
 
 .fiche-resultat {
   margin-top: var(--espace-3);
-  font-size: var(--taille-3);
-  font-weight: 500;
+  font-size: 1.1875rem;
   line-height: 1.5;
 }
 
@@ -444,8 +462,8 @@ a:hover {
 .chiffres-cles dt {
   margin-top: var(--espace-2);
   color: var(--couleur-texte-secondaire);
-  font-size: var(--taille-0);
-  line-height: 1.4;
+  font-size: var(--taille-1);
+  line-height: 1.45;
 }
 
 .fiche-details {
@@ -454,8 +472,8 @@ a:hover {
 
 .fiche-details summary {
   color: var(--couleur-accent);
-  font-family: var(--police-legende);
-  font-size: var(--taille-0);
+  font-size: var(--taille-1);
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -470,22 +488,15 @@ a:hover {
 
 .fiche-liens {
   margin-top: var(--espace-4);
-  font-family: var(--police-legende);
-  font-size: var(--taille-0);
+  font-size: var(--taille-1);
 }
-
 
 .fiche-texte {
   margin-top: var(--espace-3);
 }
 
-.section-action {
-  margin-top: var(--espace-7);
-}
-
 .section-note {
-  max-width: var(--largeur-texte);
-  margin-top: var(--espace-6);
+  max-width: 40rem;
   color: var(--couleur-texte-secondaire);
   font-size: var(--taille-1);
 }
@@ -494,8 +505,8 @@ a:hover {
 .problemes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--espace-5) var(--espace-8);
-  margin: var(--espace-7) 0 0;
+  gap: var(--espace-6) var(--espace-7);
+  margin: 0;
   padding: 0;
   list-style: none;
   counter-reset: probleme;
@@ -503,26 +514,28 @@ a:hover {
 
 .problemes li {
   padding-top: var(--espace-3);
-  border-top: 1px solid var(--couleur-filet);
+  border-top: 2px solid var(--couleur-accent);
   font-size: var(--taille-3);
   counter-increment: probleme;
 }
 
 .problemes li::before {
-  content: counter(probleme, decimal-leading-zero);
+  content: counter(probleme);
   display: block;
   margin-bottom: var(--espace-2);
   color: var(--couleur-accent);
   font-family: var(--police-legende);
-  font-size: var(--taille-0);
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.1;
 }
 
-/* Méthode : quatre étapes côte à côte, numéro en bleu */
+/* Méthode : quatre étapes, deux par ligne, numéro en bleu */
 .etapes {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--espace-5);
-  margin: var(--espace-7) 0 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espace-6) var(--espace-7);
+  margin: 0;
   padding: 0;
   list-style: none;
   counter-reset: etape;
@@ -540,7 +553,7 @@ a:hover {
   margin-bottom: var(--espace-2);
   color: var(--couleur-accent);
   font-family: var(--police-legende);
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 500;
   line-height: 1.1;
 }
@@ -548,21 +561,22 @@ a:hover {
 .etapes strong {
   display: block;
   margin-bottom: var(--espace-1);
+  font-size: var(--taille-3);
   font-weight: 600;
 }
 
-/* Parcours : frise datée, la date dans la marge */
+/* Parcours : frise datée, la date dans la colonne de gauche */
 .frise {
-  margin: var(--espace-7) 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .frise-etape {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
   column-gap: var(--espace-8);
-  padding-block: var(--espace-4);
+  padding-block: var(--espace-5);
   border-top: 1px solid var(--couleur-filet);
 }
 
@@ -589,22 +603,21 @@ a:hover {
 
 /* Contact */
 .coordonnees {
-  margin: var(--espace-6) 0 0;
   max-width: 44rem;
+  margin: 0;
 }
 
 .coordonnees div {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
-  column-gap: var(--espace-8);
+  column-gap: var(--espace-6);
   padding-block: var(--espace-3);
   border-top: 1px solid var(--couleur-filet);
 }
 
 .coordonnees dt {
   color: var(--couleur-texte-secondaire);
-  font-family: var(--police-legende);
-  font-size: var(--taille-0);
+  font-size: var(--taille-1);
 }
 
 .coordonnees dd {
@@ -621,20 +634,288 @@ a:hover {
 }
 
 /* Pied de page */
-.pied {
-  margin-top: var(--espace-8);
-}
-
 .pied-contenu {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--espace-2) var(--espace-5);
-  padding-block: var(--espace-5);
+  padding-block: var(--espace-6);
   border-top: 1px solid var(--couleur-encre);
   color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-1);
+}
+
+
+/* Page détaillée d'un projet */
+
+.page-entete {
+  padding-block: var(--espace-8) var(--espace-7);
+}
+
+.page-entete h1 {
+  margin-top: var(--espace-2);
+  font-size: var(--taille-titre);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.page-chapo {
+  max-width: 44rem;
+  margin-top: var(--espace-4);
+  font-size: var(--taille-3);
+}
+
+.page-entete .chiffres-cles {
+  max-width: 56rem;
+  margin-top: var(--espace-6);
+}
+
+.page-liens {
+  margin-top: var(--espace-5);
+  font-size: var(--taille-1);
+}
+
+.etude-colonnes .schema {
+  max-width: 34rem;
+  margin-top: var(--espace-6);
+}
+
+.etude-texte {
+  max-width: 40rem;
+}
+
+.etude-texte p + p,
+.etude-texte p + ul,
+.etude-texte ul + p {
+  margin-top: var(--espace-4);
+}
+
+
+/* Schémas : dessin ou graphique, légende numérotée dessous */
+.schema {
+  margin: 0;
+}
+
+
+.schema-dessin {
+  width: 100%;
+  color: var(--couleur-accent);
+}
+
+.schema-dessin .repere {
+  color: var(--couleur-accent);
+}
+
+.marque circle {
+  fill: var(--couleur-fond);
+  stroke: var(--couleur-encre);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.marque text {
+  fill: var(--couleur-encre);
+  font-family: var(--police-legende);
+  font-size: 11px;
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.schema figcaption {
+  margin-top: var(--espace-3);
+  padding-top: var(--espace-3);
+  border-top: 1px solid var(--couleur-filet);
+}
+
+.schema-numero {
+  color: var(--couleur-accent);
   font-family: var(--police-legende);
   font-size: var(--taille-0);
+}
+
+.schema-legende {
+  margin: var(--espace-2) 0 0;
+  padding-left: 1.4em;
+  font-size: var(--taille-1);
+}
+
+.schema-legende li::marker {
+  color: var(--couleur-texte-secondaire);
+  font-family: var(--police-legende);
+}
+
+.schema-note {
+  max-width: 48rem;
+  margin-top: var(--espace-2);
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-1);
+}
+
+/* Schéma 2 : défauts des annotations, côte à côte */
+.defauts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--espace-5);
+}
+
+.defaut svg {
+  width: 100%;
+}
+
+.defaut .racine {
+  fill: none;
+  stroke: #B9C0BE;
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.defaut .annotation {
+  fill: none;
+  stroke: var(--couleur-accent);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.defaut p {
+  margin-top: var(--espace-2);
+  font-size: var(--taille-1);
+  font-weight: 600;
+}
+
+/* Étapes de la méthode, numérotées */
+.liste-etapes {
+  max-width: 48rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: etape;
+}
+
+.liste-etapes li {
+  position: relative;
+  padding: var(--espace-3) 0 var(--espace-3) 2.75rem;
+  border-top: 1px solid var(--couleur-filet);
+  counter-increment: etape;
+}
+
+.liste-etapes li::before {
+  content: counter(etape);
+  position: absolute;
+  top: var(--espace-3);
+  left: 0;
+  color: var(--couleur-accent);
+  font-family: var(--police-legende);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* Schéma 3 : chaîne de traitement */
+.chaine {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--espace-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chaine li {
+  position: relative;
+  padding: var(--espace-3);
+  border: 1px solid var(--couleur-accent);
+  border-radius: 3px;
+}
+
+.chaine li + li::before {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  left: calc(-1 * var(--espace-6));
+  width: var(--espace-6);
+  color: var(--couleur-accent);
+  text-align: center;
+  transform: translateY(-50%);
+}
+
+.chaine strong {
+  display: block;
+  font-weight: 600;
+}
+
+.chaine span {
+  display: block;
+  margin-top: var(--espace-1);
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-0);
+  line-height: 1.4;
+}
+
+/* Résultats et limites, côte à côte */
+.bilan {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espace-8);
+}
+
+.bilan h3 {
+  padding-bottom: var(--espace-2);
+  border-bottom: 2px solid var(--couleur-accent);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+/* Figures simples de la page projet : légende en tête, image sur cadre sombre, source */
+.figure-simple {
+  margin: 0;
+}
+
+.figure-simple figcaption {
+  margin-bottom: var(--espace-4);
+}
+
+.figure-simple .figure-cadre img {
+  width: 100%;
+}
+
+.figure-etroite {
+  max-width: 44rem;
+}
+
+.figure-etroite.clair {
+  max-width: 34rem;
+}
+
+/* Graphique sur fond clair : pas de cadre sombre, un simple filet */
+.figure-cadre.figure-cadre-clair {
+  padding: var(--espace-3);
+  border: 1px solid var(--couleur-filet);
+  background: var(--couleur-fond);
+}
+
+/* Liens pour essayer */
+.liens-essai {
+  max-width: 48rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.liens-essai li {
+  padding-block: var(--espace-3);
+  border-top: 1px solid var(--couleur-filet);
+}
+
+.liens-essai a {
+  font-weight: 600;
+}
+
+.liens-essai span {
+  display: block;
+  margin-top: var(--espace-1);
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-1);
 }
 
 
@@ -661,7 +942,7 @@ a:hover {
   color: var(--couleur-encre);
 }
 
-.figure-schema .trait {
+:is(.figure-schema, .schema-dessin) .trait {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.25;
@@ -670,16 +951,16 @@ a:hover {
   vector-effect: non-scaling-stroke;
 }
 
-.figure-schema .fin {
+:is(.figure-schema, .schema-dessin) .fin {
   stroke-width: 0.9;
 }
 
-.figure-schema .racine {
+:is(.figure-schema, .schema-dessin) .racine {
   stroke-width: 0.9;
   stroke-opacity: 0.75;
 }
 
-.figure-schema .grains {
+:is(.figure-schema, .schema-dessin) .grains {
   fill: currentColor;
   fill-opacity: 0.3;
 }
@@ -713,8 +994,7 @@ a:hover {
   max-width: 44rem;
   margin-top: var(--espace-2);
   color: var(--couleur-texte-secondaire);
-  font-family: var(--police-legende);
-  font-size: var(--taille-legende);
+  font-size: var(--taille-1);
   line-height: 1.55;
 }
 
@@ -821,8 +1101,7 @@ a:hover {
   padding-top: var(--espace-3);
   border-top: 1px solid var(--couleur-filet);
   color: var(--couleur-texte-secondaire);
-  font-family: var(--police-legende);
-  font-size: var(--taille-legende);
+  font-size: var(--taille-1);
 }
 
 .figure-lecture {
@@ -857,7 +1136,22 @@ a:hover {
 
   .vitrine,
   .section {
-    padding-bottom: var(--espace-8);
+    padding-block: var(--espace-8);
+  }
+
+  .section,
+  .section > .section-entete:has(.section-chapo) {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--espace-6);
+  }
+
+  .section > *,
+  .section > .section-entete {
+    grid-column: 1;
+  }
+
+  .section > .section-entete:has(.section-chapo) {
+    row-gap: var(--espace-4);
   }
 
   .fiche {
@@ -874,6 +1168,30 @@ a:hover {
   .etapes {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--espace-4);
+  }
+
+  .bilan {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--espace-6);
+  }
+
+  .defauts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chaine {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espace-5);
+  }
+
+  .chaine li + li::before {
+    content: "↓";
+    top: calc(-1 * var(--espace-5));
+    left: 0;
+    width: 100%;
+    height: var(--espace-5);
+    line-height: var(--espace-5);
+    transform: none;
   }
 
   .frise-etape,

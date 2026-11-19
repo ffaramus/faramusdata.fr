@@ -13,12 +13,15 @@ document.querySelectorAll(".figure").forEach((figure) => {
 
   const images = figure.querySelectorAll("[data-panneau]");
   const mesures = figure.querySelectorAll("[data-mesure]");
+  // dossier des panneaux, déduit de l'image affichée : marche depuis n'importe quelle page
+  const dossier = images[0].getAttribute("src").replace(/[^/]*$/, "");
+  const chemin = (bouton, img) => `${dossier}${bouton.dataset.cle}-${img.dataset.panneau}.webp`;
   let courant = 0;
   let minuteur = null;
 
   const precharger = (bouton) => {
     images.forEach((img) => {
-      new Image().src = `assets/img/racines/${bouton.dataset.cle}-${img.dataset.panneau}.webp`;
+      new Image().src = chemin(bouton, img);
     });
   };
 
@@ -26,7 +29,7 @@ document.querySelectorAll(".figure").forEach((figure) => {
     courant = index;
     const bouton = boutons[index];
     images.forEach((img) => {
-      img.src = `assets/img/racines/${bouton.dataset.cle}-${img.dataset.panneau}.webp`;
+      img.src = chemin(bouton, img);
       img.width = bouton.dataset.largeur;
       img.height = bouton.dataset.hauteur;
       img.alt = bouton.dataset[img.dataset.panneau];

@@ -7,6 +7,7 @@ repère qui descend jusqu'au bas du dessin (il touche le cadre du premier pannea
 """
 import math
 import random
+import sys
 
 SOL_Y = 110
 
@@ -130,9 +131,11 @@ sortie = pt(HAUT, -4, 0)
 ajout(f'<path class="trait fin" d="M{f(haut_cam[0])} {f(haut_cam[1])} L{f(sortie[0])} {f(sortie[1])} '
       f'C{f(sortie[0] + 8)} {f(sortie[1] - 10)} 418 50 436 48"/>')
 
-# Repère : cercle sur la fenêtre d'observation, trait jusqu'au bas du dessin
+# Repère : cercle sur la fenêtre d'observation, et trait jusqu'au bas du dessin
+# (sauf avec --sans-trait, pour le schéma de la page détaillée)
 fx, fy = FENETRE
+trait = "" if "--sans-trait" in sys.argv else f'<path class="trait" d="M{f(fx)} {f(fy + RAYON_REPERE)} L{f(fx)} 320"/>'
 ajout(f'<g class="repere"><circle class="trait" cx="{f(fx)}" cy="{f(fy)}" r="{RAYON_REPERE}" '
-      f'stroke-dasharray="3 3"/><path class="trait" d="M{f(fx)} {f(fy + RAYON_REPERE)} L{f(fx)} 320"/></g>')
+      f'stroke-dasharray="3 3"/>{trait}</g>')
 
 print("\n".join(lignes))

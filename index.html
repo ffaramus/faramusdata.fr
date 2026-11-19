@@ -17,7 +17,7 @@
       <nav class="navigation" aria-label="Navigation principale">
         <ul>
           <li><a href="#offres">Offres</a></li>
-          <li><a href="#realisations">Réalisations</a></li>
+          <li><a href="#projets">Projets</a></li>
           <li><a href="#methode">Méthode</a></li>
           <li><a href="#parcours">Parcours</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -54,7 +54,7 @@
         </aside>
       </section>
 
-      <section class="vitrine" aria-labelledby="figure-titre">
+      <section class="vitrine bande" aria-labelledby="figure-titre">
         <figure class="figure">
           <figcaption>
             <p class="figure-numero">Figure 1</p>
@@ -198,15 +198,17 @@
           </div>
           <p class="figure-source">
             <span>Images&#8239;: <a href="https://datadryad.org/dataset/doi:10.5061/dryad.2v6wwpzp4">jeu de données PRMI</a> (Xu et al., 2022), licence CC0</span>
-            <span class="figure-liens"><a href="https://rootseg.streamlit.app">Démo en ligne</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></span>
+            <span class="figure-liens"><a href="projets/root-segmentator.html">Le projet en détail</a> · <a href="https://rootseg.streamlit.app">Démo en ligne</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></span>
           </p>
         </figure>
       </section>
 
       <section class="section" id="problemes" aria-labelledby="problemes-titre">
         <header class="section-entete">
-          <p class="section-etiquette">01 · Problèmes</p>
-          <h2 id="problemes-titre">Les problèmes que je résous</h2>
+          <div class="section-titre">
+            <p class="section-etiquette">Problèmes</p>
+            <h2 id="problemes-titre">Les problèmes que je résous</h2>
+          </div>
         </header>
         <ol class="problemes">
           <li>Vous mesurez encore vos images à la main, et cela prend des semaines.</li>
@@ -216,10 +218,12 @@
         </ol>
       </section>
 
-      <section class="section" id="offres" aria-labelledby="offres-titre">
+      <section class="section bande" id="offres" aria-labelledby="offres-titre">
         <header class="section-entete">
-          <p class="section-etiquette">02 · Offres</p>
-          <h2 id="offres-titre">Trois façons de travailler ensemble</h2>
+          <div class="section-titre">
+            <p class="section-etiquette">Offres</p>
+            <h2 id="offres-titre">Trois façons de travailler ensemble</h2>
+          </div>
         </header>
 
         <article class="fiche" aria-labelledby="offre-faisabilite">
@@ -265,10 +269,12 @@
         <p class="section-action"><a class="bouton" href="#contact">Parlons de vos images</a></p>
       </section>
 
-      <section class="section" id="realisations" aria-labelledby="realisations-titre">
+      <section class="section" id="projets" aria-labelledby="projets-titre">
         <header class="section-entete">
-          <p class="section-etiquette">03 · Réalisations</p>
-          <h2 id="realisations-titre">Des images imparfaites aux mesures fiables</h2>
+          <div class="section-titre">
+            <p class="section-etiquette">Projets</p>
+            <h2 id="projets-titre">Projets menés et en cours</h2>
+          </div>
           <p class="section-chapo">Trois projets sur des images réelles, peu annotées ou mal annotées, traitées par des outils rapides qui tournent sur un ordinateur ordinaire, sans carte graphique.</p>
         </header>
 
@@ -301,19 +307,19 @@
             <h3 id="fiche-racines">Root Segmentator</h3>
             <p class="fiche-resultat">Mesurer automatiquement les racines en millimètres sur des images de minirhizotron&#8239;: longueur, diamètre, intensité racinaire.</p>
             <dl class="chiffres-cles">
-              <div><dt>Recouvrement médian entre racines détectées et annotées (Dice, de 0 à 1), sur des tubes jamais vus</dt><dd>0,79</dd></div>
-              <div><dt>Images sans racine prises à tort pour des images avec racines</dt><dd>0&#8239;%</dd></div>
+              <div><dt>Recouvrement médian entre racines détectées et annotées (Dice, de 0 à 1), sur des tubes jamais vus</dt><dd>0,74 à 0,79</dd></div>
+              <div><dt>Fausses alertes sur les images sans racine, divisées grâce au filtre</dt><dd>÷&#8239;3 à 4</dd></div>
               <div><dt>Images par minute sur un ordinateur portable, sans carte graphique</dt><dd>360</dd></div>
             </dl>
             <details class="fiche-details">
               <summary>En savoir plus</summary>
               <ul class="fiche-points">
-                <li>Le Dice mesure, de 0 à 1, le recouvrement entre les racines détectées et les racines annotées. Les deux premiers chiffres portent sur 50 images corrigées à la main.</li>
+                <li>Le Dice mesure, de 0 à 1, le recouvrement entre les racines détectées et les racines annotées&#8239;: 0,79 sur 50 images corrigées à la main, 0,74 sur 4&#8239;743 images, 0,79 sur une autre caméra.</li>
                 <li>Longueur totale des racines estimée à 7,5&#8239;% près après étalonnage.</li>
                 <li>Échelle vérifiée sur les données&#8239;: le «&#8239;150 DPI&#8239;» des métadonnées était faux d’un facteur 7.</li>
               </ul>
             </details>
-            <p class="fiche-liens"><a href="https://rootseg.streamlit.app">Démo en ligne</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></p>
+            <p class="fiche-liens"><a href="projets/root-segmentator.html">Le projet en détail</a> · <a href="https://rootseg.streamlit.app">Démo en ligne</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></p>
           </div>
         </article>
 
@@ -330,10 +336,12 @@
         </article>
       </section>
 
-      <section class="section" id="methode" aria-labelledby="methode-titre">
+      <section class="section bande" id="methode" aria-labelledby="methode-titre">
         <header class="section-entete">
-          <p class="section-etiquette">04 · Méthode</p>
-          <h2 id="methode-titre">Comment je travaille</h2>
+          <div class="section-titre">
+            <p class="section-etiquette">Méthode</p>
+            <h2 id="methode-titre">Comment je travaille</h2>
+          </div>
         </header>
         <ol class="etapes">
           <li><strong>Un premier échange</strong> Pour comprendre votre question biologique, pas seulement vos données.</li>
@@ -346,8 +354,10 @@
 
       <section class="section" id="parcours" aria-labelledby="parcours-titre">
         <header class="section-entete">
-          <p class="section-etiquette">05 · Parcours</p>
-          <h2 id="parcours-titre">La biologie et la donnée</h2>
+          <div class="section-titre">
+            <p class="section-etiquette">Parcours</p>
+            <h2 id="parcours-titre">La biologie et la donnée</h2>
+          </div>
           <p class="section-chapo">Cette double formation me permet de comprendre le contexte biologique de vos données&#8239;: ce qu’on cherche à mesurer, pourquoi, et avec quelle exigence de rigueur statistique. Je fais le lien entre ceux qui connaissent le vivant, ingénieurs, techniciens ou chercheurs, et le code qui mesure.</p>
         </header>
         <ol class="frise">
@@ -375,10 +385,12 @@
         </ol>
       </section>
 
-      <section class="section" id="contact" aria-labelledby="contact-titre">
+      <section class="section bande" id="contact" aria-labelledby="contact-titre">
         <header class="section-entete">
-          <p class="section-etiquette">06 · Contact</p>
-          <h2 id="contact-titre">Parlons de vos images</h2>
+          <div class="section-titre">
+            <p class="section-etiquette">Contact</p>
+            <h2 id="contact-titre">Parlons de vos images</h2>
+          </div>
           <p class="section-chapo">Vous avez des images à analyser, ou simplement une question&#8239;? Écrivez-moi, je réponds sous 48&#8239;heures.</p>
         </header>
         <dl class="coordonnees">
