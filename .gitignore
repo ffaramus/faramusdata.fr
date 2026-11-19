@@ -1,0 +1,7 @@
+# Fichiers privés : jamais publiés
+CLAUDE.md
+_prive/
+
+# Contenus SYSAAF : jamais commités, même temporairement (l'historique est public)
+assets/images/
+assets/video/echographie-coeur-truite.*
