@@ -1410,6 +1410,163 @@ a:hover {
   }
 }
 
+/* Téléphones (640 px et moins). Complète le bloc précédent ; ne touche pas à l'affichage sur ordinateur. */
+@media (max-width: 40rem) {
+  /* En-tête : le menu tient sur une ligne, défilable s'il manque de place */
+  .entete {
+    row-gap: var(--espace-3);
+    padding-block: var(--espace-4) var(--espace-3);
+  }
+
+  .navigation {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  .navigation ul {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: var(--espace-3);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .navigation ul::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navigation li {
+    flex-shrink: 0;
+  }
+
+  .navigation a {
+    display: block;
+    padding-block: var(--espace-2);
+    font-size: var(--taille-0);
+  }
+
+  /* Espacements verticaux réduits de moitié environ */
+  .accroche {
+    row-gap: var(--espace-5);
+    padding-block: var(--espace-6);
+  }
+
+  .vitrine,
+  .section {
+    padding-block: calc(var(--espace-8) / 2);
+  }
+
+  .section {
+    row-gap: var(--espace-5);
+  }
+
+  .page-entete {
+    padding-block: var(--espace-6) var(--espace-5);
+  }
+
+  /* Haut de page : photo centrée, « En bref » sur une colonne avec un filet entre les blocs */
+  .accroche-photo {
+    justify-self: center;
+  }
+
+  .portrait {
+    max-width: 14rem;
+  }
+
+  .en-bref {
+    padding-block: 0;
+  }
+
+  .en-bref dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .en-bref dl > div {
+    padding-block: var(--espace-3);
+  }
+
+  .en-bref dl > div + div {
+    border-top: 1px solid var(--couleur-filet);
+  }
+
+  /* Figure 1 : dessin réduit et centré, panneaux empilés sur toute la largeur */
+  .figure {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "legende"
+      "schema"
+      "cadre"
+      "commandes"
+      "source"
+      "actions";
+  }
+
+  .figure-schema {
+    justify-self: center;
+    max-width: 15rem;
+  }
+
+  .figure-cadre {
+    padding: var(--espace-3);
+  }
+
+  .panneaux {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espace-4);
+  }
+
+  .panneau-titre {
+    font-size: var(--taille-1);
+  }
+
+  /* Mesures : une ligne chacune, intitulé à gauche, valeur à droite */
+  .figure-mesures {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-top: var(--espace-1);
+  }
+
+  .figure-mesures div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espace-4);
+    padding-block: var(--espace-2);
+  }
+
+  .figure-mesures div + div {
+    border-top: 1px solid #2E3335;
+  }
+
+  .figure-mesures dt {
+    font-size: var(--taille-1);
+    white-space: nowrap;
+  }
+
+  .figure-mesures dd {
+    font-size: var(--taille-3);
+    text-align: right;
+  }
+
+  /* Exemples : une seule ligne, défilable horizontalement */
+  .figure-commandes {
+    min-width: 0;
+  }
+
+  .exemples {
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: var(--espace-2);
+  }
+
+  .exemple {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
