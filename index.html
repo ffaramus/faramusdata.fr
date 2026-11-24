@@ -17,7 +17,7 @@
       <nav class="navigation" aria-label="Navigation principale">
         <ul>
           <li><a href="#offres">Offres</a></li>
-          <li><a href="#projets">Projets</a></li>
+          <li><a href="#realisations">Réalisations</a></li>
           <li><a href="#methode">Méthode</a></li>
           <li><a href="#parcours">Parcours</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -29,7 +29,7 @@
       <section class="accroche" aria-labelledby="titre-accroche">
         <div class="accroche-texte">
           <h1 id="titre-accroche">Des images du vivant aux mesures fiables.</h1>
-          <p class="sous-titre">Data scientist spécialisé en deep learning et en analyse d’images pour l’agriculture, l’aquaculture et les biotechnologies. Je conçois des modèles qui transforment vos images en mesures biologiques exploitables, et je les livre sous forme d’outils que vos équipes peuvent utiliser.</p>
+          <p class="sous-titre">Data scientist spécialisé en deep learning et en analyse d’images biologiques. Je conçois des modèles qui transforment vos images en mesures fiables, même avec peu d’annotations, et je les livre sous forme d’outils que vos équipes peuvent utiliser.</p>
           <a class="bouton" href="#contact">Parlons de vos images</a>
         </div>
 
@@ -42,7 +42,7 @@
           <h2 id="en-bref-titre">En bref</h2>
           <dl>
             <div><dt>Spécialité</dt><dd>Deep learning et analyse d’images</dd></div>
-            <div><dt>Domaines</dt><dd>Agriculture, aquaculture, biotechnologies</dd></div>
+            <div><dt>Domaines</dt><dd>Sélection animale et végétale, aquaculture, agronomie, biotechnologies, recherche biomédicale</dd></div>
             <div><dt>Formation</dt><dd>AgroParisTech (IODAA), double diplôme en bioinformatique (AMI2B, Université Paris&#8209;Saclay)</dd></div>
             <div><dt>Missions</dt><dd>À distance partout en France, déplacements ponctuels possibles</dd></div>
             <div>
@@ -177,8 +177,8 @@
                     <img data-panneau="brute" src="assets/img/racines/denses-brute.webp" width="736" height="552" alt="Image brute de minirhizotron&#8239;: plusieurs racines d’arachide, dont une grosse racine verticale.">
                   </div>
                   <div class="panneau">
-                    <p class="panneau-titre">Racines détectées</p>
-                    <img data-panneau="detectees" src="assets/img/racines/denses-detectees.webp" width="736" height="552" alt="Même image&#8239;: les racines détectées sont colorées en bleu.">
+                    <p class="panneau-titre">Image corrigée et racines détectées</p>
+                    <img data-panneau="detectees" src="assets/img/racines/denses-detectees.webp" width="736" height="552" alt="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu.">
                   </div>
                   <div class="panneau">
                     <p class="panneau-titre">Mesures</p>
@@ -193,18 +193,22 @@
           </div>
           <div class="figure-commandes" hidden>
             <div class="exemples" role="group" aria-label="Choisir un exemple">
-                <button type="button" class="exemple" data-cle="denses" data-largeur="736" data-hauteur="552" aria-pressed="true" data-brute="Image brute de minirhizotron&#8239;: plusieurs racines d’arachide, dont une grosse racine verticale." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="67,1 mm" data-diametre="0,34 mm" data-intensite="27,6 mm/cm²">Racines denses</button>
-                <button type="button" class="exemple" data-cle="fines" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: quelques racines fines, peu contrastées." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="31,5 mm" data-diametre="0,21 mm" data-intensite="12,9 mm/cm²">Racines fines</button>
-                <button type="button" class="exemple" data-cle="sombre" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: image sombre traversée par quelques racines." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="48,7 mm" data-diametre="0,25 mm" data-intensite="20,0 mm/cm²">Image sombre</button>
-                <button type="button" class="exemple" data-cle="orangee" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol aux tons orangés, traversé par plusieurs racines brunes." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="54,9 mm" data-diametre="0,30 mm" data-intensite="22,6 mm/cm²">Image orangée</button>
-                <button type="button" class="exemple" data-cle="sans-racine" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol sans racine." data-detectees="Même image&#8239;: aucune racine détectée." data-mesures="Même image assombrie&#8239;: aucune racine à mesurer." data-longueur="0,0 mm" data-diametre="aucune racine" data-intensite="0,0 mm/cm²">Sans racine</button>
+                <button type="button" class="exemple" data-cle="denses" data-largeur="736" data-hauteur="552" aria-pressed="true" data-brute="Image brute de minirhizotron&#8239;: plusieurs racines d’arachide, dont une grosse racine verticale." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="67,1 mm" data-diametre="0,34 mm" data-intensite="27,6 mm/cm²">Racines denses</button>
+                <button type="button" class="exemple" data-cle="fines" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: quelques racines fines, peu contrastées." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="31,5 mm" data-diametre="0,21 mm" data-intensite="12,9 mm/cm²">Racines fines</button>
+                <button type="button" class="exemple" data-cle="sombre" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: image sombre traversée par quelques racines." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="48,7 mm" data-diametre="0,25 mm" data-intensite="20,0 mm/cm²">Image sombre</button>
+                <button type="button" class="exemple" data-cle="orangee" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol aux tons orangés, traversé par plusieurs racines brunes." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="54,9 mm" data-diametre="0,30 mm" data-intensite="22,6 mm/cm²">Image orangée</button>
+                <button type="button" class="exemple" data-cle="sans-racine" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol sans racine." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: aucune racine détectée." data-mesures="Même image assombrie&#8239;: aucune racine à mesurer." data-longueur="0,0 mm" data-diametre="aucune racine" data-intensite="0,0 mm/cm²">Sans racine</button>
             </div>
             <button class="figure-lecture" type="button">Mettre en pause</button>
           </div>
           <p class="figure-source">
             <span>Images&#8239;: <a href="https://datadryad.org/dataset/doi:10.5061/dryad.2v6wwpzp4">jeu de données PRMI</a> (Xu et al., 2022), licence CC0</span>
-            <span class="figure-liens"><a href="projets/root-segmentator.html">Le projet en détail</a> · <a href="https://rootseg.streamlit.app">Démo en ligne</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></span>
           </p>
+          <div class="actions-projet">
+            <a class="bouton" href="projets/root-segmentator.html">Voir le projet en détail</a>
+            <a class="lien-secondaire" href="https://rootseg.streamlit.app">Essayer la démo</a>
+            <a class="lien-secondaire" href="https://github.com/ffaramus/rootseg">Code sur GitHub</a>
+          </div>
         </figure>
       </section>
 
@@ -221,6 +225,7 @@
           <li>Vos images sont difficiles&#8239;: bruitées, hétérogènes, avec peu d’exemples annotés.</li>
           <li>Vous avez un modèle qui fonctionne dans un notebook, mais personne ne peut s’en servir.</li>
         </ol>
+        <p class="section-note">Moins d’images à annoter, c’est moins de temps et d’argent dépensés.</p>
       </section>
 
       <section class="section bande" id="offres" aria-labelledby="offres-titre">
@@ -234,31 +239,38 @@
         <article class="fiche" aria-labelledby="offre-faisabilite">
           <div class="fiche-marge">
             <p class="fiche-periode">Offre 1</p>
-            <p class="fiche-statut">Avant d’investir</p>
+            <p class="offre-situation">Vous avez des images, mais pas encore de projet.</p>
           </div>
           <div class="fiche-corps">
             <h3 id="offre-faisabilite">Étude de faisabilité</h3>
             <p class="fiche-resultat">En quelques jours, savoir ce qui est automatisable sur vos images.</p>
             <p class="fiche-texte">Vous m’envoyez un échantillon de vos images. Je vous dis ce qui est automatisable, avec quelle précision attendue, et ce que coûterait un développement complet. Vous décidez ensuite, en connaissance de cause.</p>
+            <ul class="offre-modalites">
+              <li>Forfait, prix fixé à l’avance.</li>
+            </ul>
           </div>
         </article>
 
         <article class="fiche" aria-labelledby="offre-pipeline">
           <div class="fiche-marge">
             <p class="fiche-periode">Offre 2</p>
-            <p class="fiche-statut">Projet complet</p>
+            <p class="offre-situation">Vous savez ce que vous voulez mesurer.</p>
           </div>
           <div class="fiche-corps">
             <h3 id="offre-pipeline">Développement d’un pipeline image → mesures</h3>
             <p class="fiche-resultat">De la préparation des données au modèle validé, jusqu’à un outil utilisable.</p>
             <p class="fiche-texte">L’outil prend la forme qui convient à vos équipes&#8239;: interface, API ou script documenté. Les mesures produites sont comparées à des références indépendantes, pas seulement évaluées sur des scores techniques.</p>
+            <ul class="offre-modalites">
+              <li>Exemple&#8239;: <a href="projets/root-segmentator.html">Root Segmentator</a>, de l’image au fichier de mesures.</li>
+              <li>Par étapes, au temps passé.</li>
+            </ul>
           </div>
         </article>
 
         <article class="fiche" aria-labelledby="offre-appui">
           <div class="fiche-marge">
             <p class="fiche-periode">Offre 3</p>
-            <p class="fiche-statut">Projet déjà lancé</p>
+            <p class="offre-situation">Votre projet est lancé, mais il bloque.</p>
           </div>
           <div class="fiche-corps">
             <h3 id="offre-appui">Appui sur un projet existant</h3>
@@ -268,19 +280,23 @@
               <li>Amélioration d’un modèle.</li>
               <li>Mise en production d’un prototype.</li>
             </ul>
+            <ul class="offre-modalites">
+              <li>Exemple&#8239;: <a href="projets/root-segmentator.html#donnees-titre">le diagnostic et la correction des annotations de Root Segmentator</a>.</li>
+              <li>Par étapes, au temps passé.</li>
+            </ul>
           </div>
         </article>
 
         <p class="section-action"><a class="bouton" href="#contact">Parlons de vos images</a></p>
+        <p class="section-note">Mes méthodes s’appliquent à d’autres images&#8239;: <a href="#contact">parlons-en</a>.</p>
       </section>
 
-      <section class="section" id="projets" aria-labelledby="projets-titre">
+      <section class="section" id="realisations" aria-labelledby="realisations-titre">
         <header class="section-entete">
           <div class="section-titre">
-            <p class="section-etiquette">Projets</p>
-            <h2 id="projets-titre">Projets menés et en cours</h2>
+            <h2 id="realisations-titre">Réalisations</h2>
           </div>
-          <p class="section-chapo">Trois projets sur des images réelles, peu annotées ou mal annotées, traitées par des outils rapides qui tournent sur un ordinateur ordinaire, sans carte graphique.</p>
+          <p class="section-chapo">Des images réelles, peu ou mal annotées, transformées en mesures fiables avec des outils légers.</p>
         </header>
 
         <article class="fiche" aria-labelledby="fiche-truite">
@@ -312,49 +328,70 @@
             <h3 id="fiche-racines">Root Segmentator</h3>
             <p class="fiche-resultat">Mesurer automatiquement les racines en millimètres sur des images de minirhizotron&#8239;: longueur, diamètre, intensité racinaire.</p>
             <dl class="chiffres-cles">
-              <div><dt>Recouvrement médian entre racines détectées et annotées (Dice, de 0 à 1), sur des tubes jamais vus</dt><dd>0,74 à 0,79</dd></div>
-              <div><dt>Fausses alertes sur les images sans racine, divisées grâce au filtre</dt><dd>÷&#8239;3 à 4</dd></div>
+              <div><dt>Écart sur la longueur totale de racines, après étalonnage, sur des tubes jamais vus</dt><dd>7,5&#8239;%</dd></div>
+              <div><dt>Images sans racine faussement détectées, avant et après le filtre (grand jeu de test)</dt><dd>43&#8239;% → 13&#8239;%</dd></div>
               <div><dt>Images par minute sur un ordinateur portable, sans carte graphique</dt><dd>360</dd></div>
             </dl>
-            <details class="fiche-details">
-              <summary>En savoir plus</summary>
-              <ul class="fiche-points">
-                <li>Le Dice mesure, de 0 à 1, le recouvrement entre les racines détectées et les racines annotées&#8239;: 0,79 sur 50 images corrigées à la main, 0,74 sur 4&#8239;743 images, 0,79 sur une autre caméra.</li>
-                <li>Longueur totale des racines estimée à 7,5&#8239;% près après étalonnage.</li>
-                <li>Échelle vérifiée sur les données&#8239;: le «&#8239;150 DPI&#8239;» des métadonnées était faux d’un facteur 7.</li>
-              </ul>
-            </details>
-            <p class="fiche-liens"><a href="projets/root-segmentator.html">Le projet en détail</a> · <a href="https://rootseg.streamlit.app">Démo en ligne</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></p>
+            <div class="actions-projet">
+              <a class="bouton" href="projets/root-segmentator.html">Voir le projet en détail</a>
+              <a class="lien-secondaire" href="https://rootseg.streamlit.app">Essayer la démo</a>
+              <a class="lien-secondaire" href="https://github.com/ffaramus/rootseg">Code sur GitHub</a>
+            </div>
           </div>
         </article>
 
-        <article class="fiche" aria-labelledby="fiche-esturgeon">
+        <!-- Projet à venir. En décembre : remplacer la classe projet--a-venir par projet--en-cours
+             et la date par « Depuis décembre 2026 ». -->
+        <article class="fiche projet--a-venir" aria-labelledby="fiche-esturgeon">
           <div class="fiche-marge">
-            <p class="fiche-periode">Depuis décembre 2026</p>
-            <p class="fiche-cadre">Poste à mi-temps au SYSAAF</p>
-            <p class="fiche-statut">En cours, projet de deux ans</p>
+            <p class="fiche-periode">À partir de décembre 2026 <span class="etat etat--a-venir">À venir</span><span class="etat etat--en-cours">En cours</span></p>
+            <p class="fiche-cadre">Poste à mi-temps au SYSAAF, projet CavIA</p>
+            <p class="fiche-statut">Démarrage en décembre, projet de deux ans</p>
           </div>
           <div class="fiche-corps">
             <h3 id="fiche-esturgeon">Segmentation 3D des gonades d’esturgeon</h3>
-            <p class="fiche-resultat">Prédire le rendement en caviar à partir de la segmentation 3D des gonades.</p>
+            <p class="fiche-resultat">Estimer le rendement en caviar des esturgeons en segmentant leurs gonades en 3D.</p>
           </div>
         </article>
       </section>
 
-      <section class="section bande" id="methode" aria-labelledby="methode-titre">
+      <section class="section section--pleine section--delimitee bande" id="methode" aria-labelledby="methode-titre">
         <header class="section-entete">
           <div class="section-titre">
             <p class="section-etiquette">Méthode</p>
             <h2 id="methode-titre">Comment je travaille</h2>
           </div>
         </header>
-        <ol class="etapes">
-          <li><strong>Un premier échange</strong> Pour comprendre votre question biologique, pas seulement vos données.</li>
-          <li><strong>Un échantillon et une étude de faisabilité</strong> Avant tout engagement important.</li>
-          <li><strong>Un développement par étapes</strong> Chaque étape est validée avec vous.</li>
-          <li><strong>Une livraison utilisable</strong> Code, documentation et outil, avec un transfert à vos équipes.</li>
+        <ol class="methode-frise">
+          <li>
+            <p class="etape-numero">1</p>
+            <h3>Un premier échange</h3>
+            <p>Pour comprendre votre question biologique, pas seulement vos données. Gratuit, en visio, 30 minutes.</p>
+          </li>
+          <li>
+            <p class="etape-numero">2</p>
+            <h3>Un échantillon et une étude de faisabilité</h3>
+            <p>Avant tout engagement important.</p>
+          </li>
+          <li>
+            <p class="etape-numero">3</p>
+            <h3>Un développement par étapes</h3>
+            <p>Chaque étape est validée avec vous.</p>
+          </li>
+          <li>
+            <p class="etape-numero">4</p>
+            <h3>Une livraison utilisable</h3>
+            <p>Code, documentation et outil, avec un transfert à vos équipes.</p>
+          </li>
         </ol>
-        <p class="section-note">Vos données restent confidentielles, et un accord de confidentialité peut être signé avant tout échange.</p>
+        <aside class="engagements" aria-labelledby="engagements-titre">
+          <h3 id="engagements-titre">Vos données restent les vôtres</h3>
+          <ul>
+            <li>Un accord de confidentialité est signé avant tout échange de données.</li>
+            <li>Vos images ne sont ni publiées ni réutilisées pour d’autres projets&#8239;; elles sont supprimées à la fin de la mission si vous le souhaitez.</li>
+            <li>Le code et les résultats produits pour vous vous appartiennent.</li>
+          </ul>
+        </aside>
       </section>
 
       <section class="section" id="parcours" aria-labelledby="parcours-titre">
@@ -363,11 +400,12 @@
             <p class="section-etiquette">Parcours</p>
             <h2 id="parcours-titre">La biologie et la donnée</h2>
           </div>
-          <p class="section-chapo">Cette double formation me permet de comprendre le contexte biologique de vos données&#8239;: ce qu’on cherche à mesurer, pourquoi, et avec quelle exigence de rigueur statistique. Je fais le lien entre ceux qui connaissent le vivant, ingénieurs, techniciens ou chercheurs, et le code qui mesure.</p>
+          <p class="section-chapo">Ma double formation, en agronomie et en data science, me permet de comprendre le contexte biologique de vos données&#8239;: ce qu’on cherche à mesurer, pourquoi, et avec quelle exigence de rigueur statistique. Je fais le lien entre ceux qui connaissent le vivant, ingénieurs, techniciens ou chercheurs, et le code qui mesure.</p>
         </header>
         <ol class="frise">
-          <li class="frise-etape">
-            <p class="frise-date">Depuis décembre 2026</p>
+          <!-- À venir. En décembre : remplacer projet--a-venir par projet--en-cours (comme la carte esturgeon des Réalisations). -->
+          <li class="frise-etape projet--a-venir">
+            <p class="frise-date"><span class="date--a-venir">À partir de décembre 2026</span><span class="date--en-cours">Depuis décembre 2026</span></p>
             <div class="frise-contenu">
               <h3>Data scientist à mi-temps au SYSAAF</h3>
               <p>Projet de deux ans&#8239;: segmentation 3D des gonades d’esturgeon, pour prédire le rendement en caviar. Disponible en freelance le reste de la semaine.</p>
@@ -381,10 +419,25 @@
             </div>
           </li>
           <li class="frise-etape">
-            <p class="frise-date"><span class="a-completer">[À COMPLÉTER : années]</span></p>
+            <p class="frise-date">Septembre 2022 à juillet 2026</p>
             <div class="frise-contenu">
               <h3>AgroParisTech, spécialisation IODAA</h3>
-              <p>Data science et intelligence artificielle appliquées au vivant, avec un double diplôme en bioinformatique (AMI2B, Université Paris&#8209;Saclay).</p>
+              <p>Diplôme d’ingénieur&#8239;: data science et intelligence artificielle appliquées au vivant, dont une année de césure en entreprise. Double diplôme&#8239;: Master&#160;2 Bioinformatique (AMI2B), Université Paris&#8209;Saclay.</p>
+              <p class="frise-note">Data Camp&#8239;: une semaine intensive en machine learning appliqué, encadrée par des chercheurs de l’Inria (Thomas Moreau, Pedro L.&#8239;C. Rodrigues), avec un challenge de prédiction noté sur classement.</p>
+            </div>
+          </li>
+          <li class="frise-etape">
+            <p class="frise-date">Octobre 2024 à février 2025</p>
+            <div class="frise-contenu">
+              <h3>Stage chez Lisaqua, Saint-Herblain</h3>
+              <p>Startup d’élevage de crevettes en biofloc. Formalisation des procédures de production et du suivi des paramètres d’élevage avant un passage à l’échelle industrielle&#8239;; biométrie et suivi sanitaire au quotidien.</p>
+            </div>
+          </li>
+          <li class="frise-etape">
+            <p class="frise-date">Juin à août 2024</p>
+            <div class="frise-contenu">
+              <h3>Stage chez Gloria Maris, Ajaccio</h3>
+              <p>Pisciculture marine en cages (maigre, bar, daurade). Premier projet de vision par ordinateur&#8239;: suivi de la salissure des filets à partir d’images de terrain, en parallèle du travail en mer.</p>
             </div>
           </li>
         </ol>

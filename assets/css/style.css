@@ -430,6 +430,64 @@ a:hover {
   line-height: 1.4;
 }
 
+/* Offres : la situation du client dans la colonne de gauche, les modalités sous l'offre */
+.offre-situation {
+  margin-top: var(--espace-3);
+  max-width: 18rem;
+  color: var(--couleur-accent-fonce);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.offre-modalites {
+  margin: var(--espace-4) 0 0;
+  padding: var(--espace-3) 0 0;
+  border-top: 1px solid var(--couleur-filet);
+  list-style: none;
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-1);
+}
+
+.offre-modalites li + li {
+  margin-top: var(--espace-1);
+}
+
+/* État d'un projet : « À venir » (étiquette, liseré en pointillés) ou « En cours » (liseré plein).
+   Une seule classe sur la fiche choisit l'étiquette affichée et le style du liseré. */
+.etat {
+  display: none;
+  margin-left: var(--espace-2);
+  padding: 0.05em 0.5em;
+  border: 1px solid var(--couleur-accent);
+  border-radius: 3px;
+  color: var(--couleur-accent);
+  font-family: var(--police-texte);
+  font-size: var(--taille-0);
+  font-weight: 600;
+  white-space: nowrap;
+  vertical-align: 0.1em;
+}
+
+.projet--a-venir .etat--a-venir,
+.projet--en-cours .etat--en-cours {
+  display: inline-block;
+}
+
+/* Dates qui basculent avec la même classe : « À partir de » puis « Depuis » */
+.date--en-cours,
+.projet--en-cours .date--a-venir {
+  display: none;
+}
+
+.projet--en-cours .date--en-cours {
+  display: inline;
+}
+
+.projet--a-venir .fiche-statut {
+  border-left-style: dashed;
+}
+
 .fiche-corps {
   max-width: 44rem;
 }
@@ -480,7 +538,8 @@ a:hover {
   margin: 0;
   color: var(--couleur-accent);
   font-family: var(--police-legende);
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem);
+  white-space: nowrap;
   font-weight: 500;
   line-height: 1.1;
 }
@@ -517,6 +576,23 @@ a:hover {
   font-size: var(--taille-1);
 }
 
+/* Bouton principal et liens secondaires, côte à côte */
+.actions-projet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espace-4) var(--espace-6);
+  margin-top: var(--espace-6);
+}
+
+.lien-secondaire {
+  font-size: var(--taille-1);
+}
+
+.section-action + .section-note {
+  margin-top: calc(-1 * var(--espace-4));
+}
+
 .fiche-texte {
   margin-top: var(--espace-3);
 }
@@ -527,7 +603,7 @@ a:hover {
   font-size: var(--taille-1);
 }
 
-/* Problèmes : quatre phrases numérotées, deux par ligne */
+/* Problèmes : quatre constats, sans ordre, deux par ligne */
 .problemes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -545,38 +621,60 @@ a:hover {
   counter-increment: probleme;
 }
 
-.problemes li::before {
-  content: counter(probleme);
-  display: block;
-  margin-bottom: var(--espace-2);
-  color: var(--couleur-accent);
-  font-family: var(--police-legende);
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 1.1;
+/* Section dont tout le contenu occupe la largeur (titre en haut, pas de colonne de gauche) */
+.section--pleine > *,
+.section--pleine > .section-entete {
+  grid-column: 1 / -1;
 }
 
-/* Méthode : quatre étapes, deux par ligne, numéro en bleu */
-.etapes {
+/* Filets sur toute la largeur de l'écran, en haut et en bas de la bande.
+   L'image de bordure déborde à gauche et à droite sans créer de défilement horizontal. */
+.section--delimitee {
+  border-block: 1px solid var(--couleur-filet);
+  border-image: linear-gradient(var(--couleur-filet), var(--couleur-filet)) 1 / 1px 0 / 0 100vmax;
+}
+
+/* Méthode : frise horizontale, un point par étape relié au suivant */
+.methode-frise {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--espace-6) var(--espace-7);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--espace-6);
   margin: 0;
   padding: 0;
   list-style: none;
-  counter-reset: etape;
 }
 
-.etapes li {
-  padding-top: var(--espace-3);
-  border-top: 2px solid var(--couleur-accent);
-  counter-increment: etape;
+.methode-frise li {
+  position: relative;
+  padding-top: var(--espace-6);
 }
 
-.etapes li::before {
-  content: counter(etape);
-  display: block;
-  margin-bottom: var(--espace-2);
+/* le point */
+.methode-frise li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 2px solid var(--couleur-accent);
+  border-radius: 50%;
+  background: var(--couleur-bande);
+  box-sizing: border-box;
+}
+
+/* la ligne vers le point suivant */
+.methode-frise li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: calc(0.4375rem - 1px);
+  left: 0.875rem;
+  right: calc(-1 * var(--espace-6));
+  height: 2px;
+  background: var(--couleur-accent);
+}
+
+.etape-numero {
   color: var(--couleur-accent);
   font-family: var(--police-legende);
   font-size: 1.5rem;
@@ -584,11 +682,38 @@ a:hover {
   line-height: 1.1;
 }
 
-.etapes strong {
-  display: block;
-  margin-bottom: var(--espace-1);
+.methode-frise h3 {
+  margin-top: var(--espace-2);
   font-size: var(--taille-3);
   font-weight: 600;
+  line-height: 1.35;
+}
+
+.methode-frise h3 + p {
+  margin-top: var(--espace-2);
+}
+
+/* Encadré des engagements de confidentialité */
+.engagements {
+  max-width: 48rem;
+  padding: var(--espace-5) var(--espace-6);
+  border: 1px solid var(--couleur-filet);
+  border-left: 5px solid var(--couleur-accent);
+  background: var(--couleur-fond);
+}
+
+.engagements h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.engagements ul {
+  margin: var(--espace-3) 0 0;
+  padding-left: 1.1em;
+}
+
+.engagements li + li {
+  margin-top: var(--espace-2);
 }
 
 /* Parcours : frise datée, la date dans la colonne de gauche */
@@ -625,6 +750,11 @@ a:hover {
 
 .frise-contenu p {
   margin-top: var(--espace-2);
+}
+
+.frise-contenu .frise-note {
+  color: var(--couleur-texte-secondaire);
+  font-size: var(--taille-1);
 }
 
 /* Contact */
@@ -965,8 +1095,13 @@ a:hover {
     "schema    legende"
     "cadre     cadre"
     "commandes commandes"
-    "source    source";
+    "source    source"
+    "actions   actions";
   column-gap: var(--espace-6);
+}
+
+.figure > .actions-projet {
+  grid-area: actions;
 }
 
 .figure-schema {
@@ -1197,15 +1332,46 @@ a:hover {
     row-gap: var(--espace-4);
   }
 
+  .offre-situation {
+    max-width: none;
+    font-size: var(--taille-3);
+  }
+
   .chiffres-cles {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--espace-3);
   }
 
-  .problemes,
-  .etapes {
+  .problemes {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--espace-4);
+  }
+
+  .methode-frise {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espace-5);
+  }
+
+  .methode-frise li {
+    padding-top: 0;
+    padding-left: var(--espace-6);
+  }
+
+  .methode-frise li::before {
+    top: 0.3rem;
+  }
+
+  .methode-frise li:not(:last-child)::after {
+    top: 1.175rem;
+    bottom: calc(-1 * var(--espace-5) - 0.3rem);
+    left: calc(0.4375rem - 1px);
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+
+  .engagements {
+    padding: var(--espace-4) var(--espace-5);
   }
 
   .bilan {
@@ -1247,7 +1413,8 @@ a:hover {
       "schema    ."
       "cadre     cadre"
       "commandes commandes"
-      "source    source";
+      "source    source"
+      "actions   actions";
     column-gap: var(--espace-4);
   }
 

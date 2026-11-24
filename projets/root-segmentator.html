@@ -17,7 +17,7 @@
       <nav class="navigation" aria-label="Navigation principale">
         <ul>
           <li><a href="../index.html#offres">Offres</a></li>
-          <li><a href="../index.html#projets">Projets</a></li>
+          <li><a href="../index.html#realisations">Réalisations</a></li>
           <li><a href="../index.html#methode">Méthode</a></li>
           <li><a href="../index.html#parcours">Parcours</a></li>
           <li><a href="../index.html#contact">Contact</a></li>
@@ -156,8 +156,8 @@
                     <img data-panneau="brute" src="../assets/img/racines/denses-brute.webp" width="736" height="552" alt="Image brute de minirhizotron&#8239;: plusieurs racines d’arachide, dont une grosse racine verticale.">
                   </div>
                   <div class="panneau">
-                    <p class="panneau-titre">Racines détectées</p>
-                    <img data-panneau="detectees" src="../assets/img/racines/denses-detectees.webp" width="736" height="552" alt="Même image&#8239;: les racines détectées sont colorées en bleu.">
+                    <p class="panneau-titre">Image corrigée et racines détectées</p>
+                    <img data-panneau="detectees" src="../assets/img/racines/denses-detectees.webp" width="736" height="552" alt="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu.">
                   </div>
                   <div class="panneau">
                     <p class="panneau-titre">Mesures</p>
@@ -172,17 +172,17 @@
           </div>
           <div class="figure-commandes" hidden>
             <div class="exemples" role="group" aria-label="Choisir un exemple">
-                <button type="button" class="exemple" data-cle="denses" data-largeur="736" data-hauteur="552" aria-pressed="true" data-brute="Image brute de minirhizotron&#8239;: plusieurs racines d’arachide, dont une grosse racine verticale." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="67,1 mm" data-diametre="0,34 mm" data-intensite="27,6 mm/cm²">Racines denses</button>
-                <button type="button" class="exemple" data-cle="fines" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: quelques racines fines, peu contrastées." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="31,5 mm" data-diametre="0,21 mm" data-intensite="12,9 mm/cm²">Racines fines</button>
-                <button type="button" class="exemple" data-cle="sombre" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: image sombre traversée par quelques racines." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="48,7 mm" data-diametre="0,25 mm" data-intensite="20,0 mm/cm²">Image sombre</button>
-                <button type="button" class="exemple" data-cle="orangee" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol aux tons orangés, traversé par plusieurs racines brunes." data-detectees="Même image&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="54,9 mm" data-diametre="0,30 mm" data-intensite="22,6 mm/cm²">Image orangée</button>
-                <button type="button" class="exemple" data-cle="sans-racine" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol sans racine." data-detectees="Même image&#8239;: aucune racine détectée." data-mesures="Même image assombrie&#8239;: aucune racine à mesurer." data-longueur="0,0 mm" data-diametre="aucune racine" data-intensite="0,0 mm/cm²">Sans racine</button>
+                <button type="button" class="exemple" data-cle="denses" data-largeur="736" data-hauteur="552" aria-pressed="true" data-brute="Image brute de minirhizotron&#8239;: plusieurs racines d’arachide, dont une grosse racine verticale." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="67,1 mm" data-diametre="0,34 mm" data-intensite="27,6 mm/cm²">Racines denses</button>
+                <button type="button" class="exemple" data-cle="fines" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: quelques racines fines, peu contrastées." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="31,5 mm" data-diametre="0,21 mm" data-intensite="12,9 mm/cm²">Racines fines</button>
+                <button type="button" class="exemple" data-cle="sombre" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: image sombre traversée par quelques racines." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="48,7 mm" data-diametre="0,25 mm" data-intensite="20,0 mm/cm²">Image sombre</button>
+                <button type="button" class="exemple" data-cle="orangee" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol aux tons orangés, traversé par plusieurs racines brunes." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: les racines détectées sont colorées en bleu." data-mesures="Même image assombrie&#8239;: la ligne centrale blanche de chaque racine sert à mesurer la longueur." data-longueur="54,9 mm" data-diametre="0,30 mm" data-intensite="22,6 mm/cm²">Image orangée</button>
+                <button type="button" class="exemple" data-cle="sans-racine" data-largeur="736" data-hauteur="552" aria-pressed="false" data-brute="Image brute de minirhizotron&#8239;: sol sans racine." data-detectees="Même image, couleurs et éclairage corrigés&#8239;: aucune racine détectée." data-mesures="Même image assombrie&#8239;: aucune racine à mesurer." data-longueur="0,0 mm" data-diametre="aucune racine" data-intensite="0,0 mm/cm²">Sans racine</button>
             </div>
             <button class="figure-lecture" type="button">Mettre en pause</button>
           </div>
           <p class="figure-source">
             <span>Images&#8239;: <a href="https://datadryad.org/dataset/doi:10.5061/dryad.2v6wwpzp4">jeu de données PRMI</a> (Xu et al., 2022), licence CC0</span>
-            <span class="figure-liens"><a href="https://rootseg.streamlit.app">Démo en ligne</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></span>
+            <span class="figure-liens"><a href="https://rootseg.streamlit.app">Essayer la démo</a> · <a href="https://github.com/ffaramus/rootseg">Code sur GitHub</a></span>
           </p>
         </figure>
       </section>
